@@ -2,7 +2,7 @@
 <html> 
     <head> 
         <title>SmartCareerAI</title> 
-        <link rel="stylesheet" href="assets/style.css"> 
+        <link rel="stylesheet" href="assets/css/style.css"> 
     </head> 
     <body> 
         <header> 
