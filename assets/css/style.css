@@ -35,33 +35,47 @@ body {
     background: linear-gradient(to right, #1e3a8a, #0c1a4d);
 }
 
-/* Register Page Body Background */
+/*
+  ==============================================
+   Styling for the Register Page
+  ==============================================
+*/
+
+/* Apply the new background image to the register page body */
 .register-page {
-    background-color: #0c0c1d;
-    /* Replace with your actual image path */
-    background-image: url('../img/register-background.jpg');
+    background-image: url('../../assets/img/background-1.jpeg');
     background-size: cover;
     background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Makes the background stay in place on scroll */
 }
 
-/* Register Page Form Container */
+/* Style the form container with a semi-transparent "glass" effect */
 .form-container {
-    background: rgba(23, 23, 39, 0.8);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(17, 24, 39, 0.6); /* Semi-transparent dark background */
+    backdrop-filter: blur(10px); /* Frosted glass effect */
+    -webkit-backdrop-filter: blur(10px); /* Safari support */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
 }
 
-/* Shared Styles for Login/Register Password Fields */
+/* Container for the password input and the toggle icon */
 .password-container {
     position: relative;
+    display: flex;
+    align-items: center;
 }
+
+/* Styling for the show/hide password toggle icon */
 .toggle-password {
     position: absolute;
-    top: 50%;
-    right: 1rem;
-    transform: translateY(-50%);
+    right: 1rem; /* Adjust as needed */
     cursor: pointer;
-    color: #9ca3af; /* gray-400 */
+    color: #9ca3af; /* Gray color for the icon */
+    z-index: 10;
+}
+
+.toggle-password:hover {
+    color: #e5e7eb; /* Lighter gray on hover */
 }
 
 
