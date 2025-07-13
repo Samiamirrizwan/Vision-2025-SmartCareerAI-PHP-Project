@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body class="text-white">
-  <!-- Hero Section -->
   <main class="hero-section relative">
         <div class="container mx-auto min-h-screen flex items-center justify-center text-center px-4">
             <div>
@@ -45,6 +44,27 @@
                     <p class="text-gray-300">Practice common interview questions and get AI-driven feedback to boost your confidence.</p>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <section id="ai-suggester" class="py-20 bg-gray-900">
+        <div class="container mx-auto px-4 text-center">
+            <h3 class="text-3xl md:text-4xl font-bold mb-4">Get Instant Career Suggestions</h3>
+            <p class="text-gray-400 max-w-2xl mx-auto mb-8">
+                Enter your personality type (e.g., INTJ, ENFP) or a key interest (e.g., Artistic, Investigative) to get AI-powered career recommendations.
+            </p>
+            
+            <form id="career-form" class="max-w-xl mx-auto">
+                <div class="flex items-center border-2 border-gray-600 rounded-lg overflow-hidden">
+                    <input type="text" id="personality-input" name="personality" class="w-full bg-gray-800 text-white p-4 border-0 focus:ring-0" placeholder="e.g., INTJ, Artistic, Investigative..." required>
+                    <button type="submit" class="bg-blue-500 text-white font-bold py-4 px-6 hover:bg-blue-600 transition">
+                        <i class="fas fa-magic mr-2"></i> Get Suggestions
+                    </button>
+                </div>
+            </form>
+
+            <div id="ai-results" class="mt-12 text-left max-w-2xl mx-auto">
+                </div>
         </div>
     </section>
 
@@ -112,3 +132,47 @@
         </div>
     </section>
 <?php include 'includes/footer.php'; ?>
+
+<!-- API Fetching Script Starts Here -->
+<script>
+    const careerForm = document.getElementById('career-form');
+    const personalityInput = document.getElementById('personality-input');
+    const resultsContainer = document.getElementById('ai-results');
+
+    careerForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        resultsContainer.innerHTML = `<p class="text-center text-gray-400">🧠 AI is thinking... Please wait.</p>`;
+
+        const formData = new FormData();
+        formData.append('prompt', personalityInput.value); // send as "prompt" to match OpenRouter API
+
+        fetch('api/ai_suggestions.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.choices && data.choices.length > 0) {
+                const aiResponse = data.choices[0].message.content;
+
+                // Display the raw AI response inside a styled card
+                let resultsHtml = `
+                    <h4 class="text-2xl font-bold mb-4 text-blue-400">AI Career Guidance</h4>
+                    <div class="glass-card p-6 rounded-lg">
+                        <p class="text-gray-300">${aiResponse.replace(/\n/g, '<br>')}</p>
+                    </div>
+                `;
+                resultsContainer.innerHTML = resultsHtml;
+            } else {
+                resultsContainer.innerHTML = `<p class="text-center text-red-400">No response from AI. Please try again.</p>`;
+            }
+        })
+        .catch(error => {
+            console.error('Fetch Error:', error);
+            resultsContainer.innerHTML = `<p class="text-center text-red-400">An error occurred. Please check the console and ensure the backend is running correctly.</p>`;
+        });
+    });
+</script>
+<!-- API Fetching Script Ends Here -->
+</body>
