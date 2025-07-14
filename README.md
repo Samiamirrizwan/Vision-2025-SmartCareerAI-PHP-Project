@@ -72,6 +72,6 @@ AI/Logic: Works on test scoring and AI integration
 
 📧 Contact
 
-If you need help or contributions, contact the team lead or project manager.
+If you need help or contributions, contact the team lead or project manager at this email: sarizwan777@gmail.com.
 
 Would you like me to package this README file with your other files (once tools are available), or should I generate a downloadable copy separately?
