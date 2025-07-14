@@ -4,6 +4,10 @@ body {
     background-color: #0A0A1A; /* Dark background for homepage */
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 /* Homepage Hero Section */
 .hero-section {
     /* Replace with your actual image path */
@@ -58,6 +62,45 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed; /* Makes the background stay in place on scroll */
+}
+
+
+
+/* Alert Message Styling & Animations */
+.alert {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+    color: white;
+    font-weight: 500;
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+    position: relative;
+    padding-right: 2.5rem; /* Space for the close button */
+}
+
+.alert-success {
+    background-color: #16a34a; /* Green */
+}
+
+.alert-danger {
+    background-color: #dc2626; /* Red */
+}
+
+.alert-fade-out {
+    opacity: 0;
+}
+
+.alert .close-btn {
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.25rem;
+    cursor: pointer;
 }
 
 /* Style the form container with a semi-transparent "glass" effect */
@@ -205,3 +248,5 @@ button[type="submit"]:hover {
 .course-card-content {
     padding: 1.5rem;
 }
+
+
