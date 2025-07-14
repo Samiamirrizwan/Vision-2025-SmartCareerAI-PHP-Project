@@ -27,3 +27,7 @@ togglePassword.addEventListener('click', function (e) {
 });
 
 // Login Form JS *** ends
+
+// Preloader animation starts
+
+// Preloader animation ends
