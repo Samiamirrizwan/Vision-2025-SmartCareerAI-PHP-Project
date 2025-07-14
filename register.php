@@ -1,8 +1,17 @@
-<?php 
+<?php
+session_start();
+include('includes/header.php');
 
-include('includes/header.php'); 
-
-?> 
+// Check for and display messages
+$message = '';
+$message_type = '';
+if (isset($_SESSION['message'])) {
+    $message = $_SESSION['message'];
+    $message_type = $_SESSION['message_type'];
+    unset($_SESSION['message']);
+    unset($_SESSION['message_type']);
+}
+?>
 
 <head>
     <meta charset="UTF-8">
@@ -17,40 +26,32 @@ include('includes/header.php');
 
     <div class="min-h-screen flex items-start justify-center p-4 pt-16 md:pt-24">
         <div class="w-full max-w-md mx-auto">
-            <div class="form-container p-8 md:p-10 rounded-2xl shadow-2xl">
-                <h2 class="text-3xl font-bold text-center mb-6">Create an account</h2>
+            <div class="form-container p-8 md:p-10 rounded-2xl shadow-2xl bg-gray-900/50 backdrop-blur-sm">
+                <h2 class="text-3xl font-bold text-center mb-4">Create an account</h2>
 
-                <div class="flex flex-col sm:flex-row gap-4 mb-6">
-                    <button class="w-full flex items-center justify-center py-3 px-4 bg-gray-700/50 rounded-lg hover:bg-gray-600/50 transition">
-                        <img src="https://www.google.com/favicon.ico" alt="Google icon" class="w-5 h-5 mr-3">
-                        <span>Google</span>
-                    </button>
-                    <button class="w-full flex items-center justify-center py-3 px-4 bg-gray-700/50 rounded-lg hover:bg-gray-600/50 transition">
-                        <i class="fab fa-facebook text-xl mr-3 text-[#1877F2]"></i>
-                        <span>Facebook</span>
-                    </button>
+                <?php if ($message): ?>
+                <div id="alertMessage" class="alert <?php echo $message_type === 'success' ? 'alert-success' : 'alert-danger'; ?>">
+                    <span><?php echo $message; ?></span>
+                    <button class="close-btn" onclick="document.getElementById('alertMessage').style.display='none'">&times;</button>
                 </div>
+                <?php endif; ?>
 
-                <div class="my-6 flex items-center">
-                    <div class="flex-grow border-t border-gray-600"></div>
-                    <span class="mx-4 text-sm text-gray-400">Or</span>
-                    <div class="flex-grow border-t border-gray-600"></div>
-                </div>
+                <form method="POST" action="register_handler.php">
+                    <div class="mb-4">
+                        <label for="name" class="block text-sm font-medium text-gray-300 mb-2">Full Name</label>
+                        <input type="text" id="name" name="name" class="w-full px-4 py-3 bg-gray-800/60 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="John Doe" required>
+                    </div>
 
-                <form action="#" method="POST">
                     <div class="mb-4">
                         <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Email</label>
                         <input type="email" id="email" name="email" class="w-full px-4 py-3 bg-gray-800/60 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="your.email@example.com" required>
                     </div>
 
                     <div class="mb-6">
-                         <div class="flex justify-between items-center mb-2">
-                            <label for="password" class="block text-sm font-medium text-gray-300">Password</label>
-                            <a href="#" class="text-sm text-blue-400 hover:underline">Forgot?</a>
-                        </div>
-                        <div class="password-container">
+                        <label for="password" class="block text-sm font-medium text-gray-300 mb-2">Password</label>
+                        <div class="relative">
                             <input type="password" id="password" name="password" class="w-full px-4 py-3 bg-gray-800/60 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your password" required>
-                             <i class="fas fa-eye toggle-password" id="togglePassword"></i>
+                            <i class="fas fa-eye absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer text-gray-400" id="togglePassword"></i>
                         </div>
                     </div>
 
@@ -64,6 +65,9 @@ include('includes/header.php');
         </div>
     </div>
 
-<?php 
-include('includes/footer.php'); 
+    <script src="assets/js/main.js"></script>
+</body>
+
+<?php
+include('includes/footer.php');
 ?>
