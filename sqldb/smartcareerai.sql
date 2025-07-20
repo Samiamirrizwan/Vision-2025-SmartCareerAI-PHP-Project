@@ -86,3 +86,13 @@ CREATE TABLE logs (
   log_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+-- Table: Tokens (For User Login/Registration)
+CREATE TABLE auth_tokens (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    selector VARCHAR(255) NOT NULL,
+    hashed_validator VARCHAR(255) NOT NULL,
+    user_id INT NOT NULL,
+    expires DATETIME NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
