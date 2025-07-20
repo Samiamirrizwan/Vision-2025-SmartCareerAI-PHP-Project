@@ -1,73 +1,98 @@
 <?php
 session_start();
-include('includes/header.php');
 
-// Check for and display messages
-$message = '';
-$message_type = '';
-if (isset($_SESSION['message'])) {
-    $message = $_SESSION['message'];
-    $message_type = $_SESSION['message_type'];
-    unset($_SESSION['message']);
-    unset($_SESSION['message_type']);
+// --- 1. Security Enhancement: Generate CSRF Token ---
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
+$csrf_token = $_SESSION['csrf_token'];
+
+// --- 2. UX Enhancement: Retrieve Flash Messages & Old Input ---
+$message = $_SESSION['flash_message']['message'] ?? '';
+$message_type = $_SESSION['flash_message']['type'] ?? '';
+$old_input = $_SESSION['old_input'] ?? [];
+
+// Clear session data after retrieving it.
+unset($_SESSION['flash_message']);
+unset($_SESSION['old_input']);
+
+// Include the header after all PHP logic
+include('includes/header.php');
 ?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Account - Smart Career AI</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body class="register-page text-white">
+<link rel="stylesheet" href="assets/css/style.css">
+<!-- General scripts are loaded first -->
+<script src="/assets/js/script.js"></script>
+<script src="/assets/js/main.js"></script>
 
-    <div class="min-h-screen flex items-start justify-center p-4 pt-16 md:pt-24">
+<main class="register-page text-white">
+    <div class="min-h-screen flex items-center justify-center p-4 pt-24 md:pt-24">
         <div class="w-full max-w-md mx-auto">
-            <div class="form-container p-8 md:p-10 rounded-2xl shadow-2xl bg-gray-900/50 backdrop-blur-sm">
-                <h2 class="text-3xl font-bold text-center mb-4">Create an account</h2>
+            <div class="form-container p-8 md:p-10 rounded-2xl shadow-2xl">
+                <h2 class="text-3xl font-bold text-center mb-2">Create Your Account</h2>
+                <p class="text-center text-gray-400 mb-6">Join us and start your journey.</p>
 
                 <?php if ($message): ?>
-                <div id="alertMessage" class="alert <?php echo $message_type === 'success' ? 'alert-success' : 'alert-danger'; ?>">
-                    <span><?php echo $message; ?></span>
-                    <button class="close-btn" onclick="document.getElementById('alertMessage').style.display='none'">&times;</button>
+                <div id="alertMessage" class="alert <?php echo $message_type === 'success' ? 'alert-success' : 'alert-danger'; ?>" role="alert">
+                    <span><?php echo htmlspecialchars($message); ?></span>
+                    <button class="close-btn" aria-label="Close" onclick="this.parentElement.style.display='none'">&times;</button>
                 </div>
                 <?php endif; ?>
 
-                <form method="POST" action="register_handler.php">
+                <form id="registerForm" method="POST" action="register_handler.php" novalidate>
+                    <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
+
                     <div class="mb-4">
                         <label for="name" class="block text-sm font-medium text-gray-300 mb-2">Full Name</label>
-                        <input type="text" id="name" name="name" class="w-full px-4 py-3 bg-gray-800/60 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="John Doe" required>
+                        <input type="text" id="name" name="name" class="form-input" placeholder="John Doe" value="<?php echo htmlspecialchars($old_input['name'] ?? ''); ?>" required>
                     </div>
 
                     <div class="mb-4">
                         <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Email</label>
-                        <input type="email" id="email" name="email" class="w-full px-4 py-3 bg-gray-800/60 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="your.email@example.com" required>
+                        <input type="email" id="email" name="email" class="form-input" placeholder="your.email@example.com" value="<?php echo htmlspecialchars($old_input['email'] ?? ''); ?>" required>
                     </div>
 
-                    <div class="mb-6">
+                    <div class="mb-4">
                         <label for="password" class="block text-sm font-medium text-gray-300 mb-2">Password</label>
-                        <div class="relative">
-                            <input type="password" id="password" name="password" class="w-full px-4 py-3 bg-gray-800/60 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your password" required>
-                            <i class="fas fa-eye absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer text-gray-400" id="togglePassword"></i>
+                        <div class="password-container">
+                            <input type="password" id="password" name="password" class="form-input" placeholder="Choose a strong password" required>
+                            <i class="toggle-password fas fa-eye" data-target="#password" aria-label="Toggle password visibility"></i>
+                        </div>
+                        <div id="password-strength-meter" class="mt-2 h-2.5 w-full bg-gray-700 rounded-full">
+                           <div class="strength-bar h-full rounded-full transition-all duration-300"></div>
+                        </div>
+                        <p id="password-strength-text" class="text-xs text-gray-400 mt-1"></p>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label for="password_confirm" class="block text-sm font-medium text-gray-300 mb-2">Confirm Password</label>
+                        <div class="password-container">
+                            <input type="password" id="password_confirm" name="password_confirm" class="form-input" placeholder="Enter your password again" required>
+                            <i class="toggle-password fas fa-eye" data-target="#password_confirm" aria-label="Toggle password visibility"></i>
                         </div>
                     </div>
 
-                    <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition duration-300">Create account</button>
+                    <div class="mb-6">
+                        <div class="flex items-center">
+                            <input id="terms" name="terms" type="checkbox" required class="h-4 w-4 rounded border-gray-500 bg-gray-700 text-blue-600 focus:ring-blue-500">
+                            <label for="terms" class="ml-2 block text-sm text-gray-300">
+                                I agree to the <a href="/terms.php" class="text-blue-400 hover:underline" target="_blank">Terms of Service</a>.
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full btn btn-primary">Create Account</button>
                 </form>
 
                 <p class="text-center text-gray-400 mt-8">
-                    Already have an account? <a href="login.php" class="text-blue-400 font-semibold hover:underline">Log in</a>
+                    Already have an account? <a href="login.php" class="text-blue-400 font-semibold hover:underline">Log In</a>
                 </p>
             </div>
         </div>
     </div>
+</main>
 
-    <script src="assets/js/main.js"></script>
-</body>
+<!-- Specific script for register page functionality -->
+<script src="assets/js/register.js"></script>
 
-<?php
-include('includes/footer.php');
-?>
+<?php include('includes/footer.php'); ?>
