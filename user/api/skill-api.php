@@ -59,7 +59,7 @@ if (empty(trim($skills))) {
 
 // --- CONFIGURATION ---
 // Replace with your actual Google Gemini API key
-$apiKey = 'AIzaSyCk01jvt7t8vR78VZnnb4rTEZU8kW4l5dk'; 
+$apiKey = 'YourAPIKey'; 
 
 // Combine system instruction and user input into a single, clear prompt for Gemini
 $prompt = "You are a career growth advisor. Your goal is to analyze the provided skills, identify strengths, and suggest concrete areas for improvement or complementary skills to learn. \n\nSkills Provided:\n" . $skills;
