@@ -1,0 +1,218 @@
+/* --- Core Body & Font --- */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #0c0d11; /* A very dark, near-black color */
+    color: #e5e7eb; /* Light gray for text */
+    overflow-x: hidden;
+}
+
+/* --- Page Loader --- */
+.loader-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #0c0d11;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 0.75s, visibility 0.75s;
+}
+.loader {
+    border: 5px solid #374151; /* gray-700 */
+    border-top: 5px solid #3b82f6; /* blue-500 */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* --- Interactive Background Canvas --- */
+#particle-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: -1;
+}
+
+/* --- Enhanced Ghost Mouse Follower (Comet Trail) --- */
+.ghost-mouse {
+    position: fixed;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 999;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.5) 0%, rgba(59, 130, 246, 0) 60%);
+    transition: transform 0.15s ease-out, opacity 0.3s;
+}
+.ghost-mouse::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 40%);
+    transform: scale(1.5);
+}
+
+
+/* --- Sidebar & Navigation --- */
+#sidebar {
+    background-color: rgba(17, 24, 39, 0.8); /* bg-gray-900 with opacity */
+    backdrop-filter: blur(15px);
+    border-right: 1px solid rgba(55, 65, 81, 0.3);
+}
+
+/* --- Logo Glow Animation --- */
+.logo-container {
+    transition: all 0.3s ease;
+}
+.logo-container:hover {
+    animation: glow 1.5s ease-in-out infinite alternate;
+}
+@keyframes glow {
+    from {
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #3b82f6, 0 0 20px #3b82f6;
+    }
+    to {
+        text-shadow: 0 0 10px #fff, 0 0 20px #60a5fa, 0 0 30px #60a5fa, 0 0 40px #60a5fa;
+    }
+}
+
+.nav-link {
+    display: block;
+    padding: 12px 16px;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    margin-bottom: 4px;
+    position: relative;
+    overflow: hidden;
+}
+.nav-link:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(59, 130, 246, 0.1);
+    transform: translateY(-50%);
+    transition: left 0.4s ease;
+    z-index: -1;
+}
+.nav-link:hover:before {
+    left: 0;
+}
+.nav-link:hover {
+    color: #ffffff;
+}
+.nav-link.active {
+    background-color: #3b82f6;
+    color: #ffffff;
+    box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.25);
+}
+.nav-link.active:hover:before {
+    background: transparent; /* Disable hover effect on active link */
+}
+
+/* --- Main Content & Cards --- */
+main {
+    position: relative;
+    z-index: 10;
+}
+.content-card {
+    background-color: rgba(31, 41, 55, 0.6);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(55, 65, 81, 0.4);
+    border-radius: 16px;
+    padding: 24px;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
+.content-card:hover {
+    border-color: rgba(59, 130, 246, 0.4);
+    transform: translateY(-5px);
+}
+
+/* --- Table Styling --- */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.data-table th, .data-table td {
+    padding: 14px 18px;
+    text-align: left;
+    border-bottom: 1px solid #374151;
+}
+.data-table th {
+    background-color: rgba(55, 65, 81, 0.5);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+.data-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+.data-table tbody tr:hover {
+    background-color: rgba(55, 65, 81, 0.3);
+}
+
+/* --- Modal Styling --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 500;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.modal-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+.modal-content {
+    background-color: #1f2937; /* gray-800 */
+    padding: 32px;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 500px;
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
+}
+.modal-overlay.visible .modal-content {
+    transform: scale(1);
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+    #sidebar {
+        height: 100%;
+    }
+    #sidebar.show {
+        transform: translateX(0);
+    }
+    .ghost-mouse {
+        display: none; /* Hide ghost mouse on touch devices */
+    }
+}
