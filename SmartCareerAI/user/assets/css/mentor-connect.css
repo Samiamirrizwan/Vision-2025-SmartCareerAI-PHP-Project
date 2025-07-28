@@ -1,0 +1,194 @@
+/* mentor-connect.css */
+
+/* --- Root Variables for Theming --- */
+:root {
+    --card-bg: #1C2128;
+    --card-border: #30363d;
+    --text-primary: #f0f6fc;
+    --text-secondary: #8b949e;
+    --accent-blue: #58a6ff;
+    --accent-blue-hover: #79c0ff;
+    --tag-bg: #388bfd1a; /* Blue with alpha */
+    --tag-text: #79c0ff;
+    --shadow-color: rgba(0, 0, 0, 0.4);
+}
+
+/* --- General Page Layout --- */
+.page-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding: 0 1rem;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* --- Mentor Grid --- */
+.mentor-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    padding: 0 1rem;
+}
+
+/* --- Mentor Card --- */
+.mentor-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.animated-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.animated-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px var(--shadow-color);
+}
+
+/* --- Card Header & Image --- */
+.mentor-card-header {
+    background-color: #2d333b;
+    padding: 2rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mentor-image {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    border: 4px solid var(--card-bg);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    object-fit: cover;
+}
+
+/* --- Card Body & Info --- */
+.mentor-info {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Allows footer to stick to the bottom */
+}
+
+.mentor-name {
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    margin: 0;
+    text-align: center;
+}
+
+.mentor-field {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin: 0.25rem 0 1.5rem;
+    text-align: center;
+    font-style: italic;
+}
+
+.mentor-bio {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    flex-grow: 1; /* Pushes footer down */
+    margin-bottom: 1.5rem;
+}
+
+/* --- Expertise Tags --- */
+.mentor-expertise {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    justify-content: center;
+}
+
+.expertise-tag {
+    background-color: var(--tag-bg);
+    color: var(--tag-text);
+    padding: 0.3rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border: 1px solid #388bfd4d;
+}
+
+/* --- Card Footer --- */
+.mentor-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto; /* Pushes footer to the bottom */
+    padding-top: 1rem;
+    border-top: 1px solid var(--card-border);
+}
+
+.mentor-connect-btn {
+    background-color: var(--accent-blue);
+    color: var(--card-bg);
+    text-decoration: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.mentor-connect-btn:hover {
+    background-color: var(--accent-blue-hover);
+}
+
+.mentor-socials {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.mentor-socials a {
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.mentor-socials a:hover {
+    color: var(--accent-blue-hover);
+    transform: scale(1.1);
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 768px) {
+    .page-title {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .mentor-grid {
+        grid-template-columns: 1fr; /* Stack cards on mobile */
+    }
+
+    .page-title {
+        font-size: 1.8rem;
+    }
+
+    .page-subtitle {
+        font-size: 1rem;
+    }
+}
