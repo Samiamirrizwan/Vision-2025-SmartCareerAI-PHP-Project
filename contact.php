@@ -21,7 +21,7 @@
                 <div class="space-y-6">
                     <div class="flex items-center">
                         <i class="fas fa-phone fa-lg mr-4 p-3 bg-white/20 rounded-full"></i>
-                        <span>+1 (555) 123-4567</span>
+                        <span>+92 (0304) 189-2255</span>
                     </div>
                     <div class="flex items-center">
                         <i class="fas fa-envelope fa-lg mr-4 p-3 bg-white/20 rounded-full"></i>
@@ -29,7 +29,7 @@
                     </div>
                     <div class="flex items-start">
                         <i class="fas fa-map-marker-alt fa-lg mr-4 p-3 bg-white/20 rounded-full"></i>
-                        <span>123 Innovation Drive, Tech City, 54321</span>
+                        <span>Pakistan, Karachi, Gulshan-E-Iqbal</span>
                     </div>
                 </div>
 
