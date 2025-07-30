@@ -36,7 +36,7 @@ include('includes/header.php');
                         <h3 class="card-title">AI Resume Builder</h3>
                     </div>
                     <p class="card-description">Generate a professional, ATS-friendly resume. Our AI will help you highlight your skills and experiences effectively.</p>
-                    <a href="api/resume-api.php" class="card-link blue">Build My Resume &rarr;</a>
+                    <a href="resume-api.php" class="card-link blue">Build My Resume &rarr;</a>
                 </div>
 
                 <!-- Skill Analysis Card -->
@@ -46,7 +46,7 @@ include('includes/header.php');
                         <h3 class="card-title">Skill Analysis</h3>
                     </div>
                     <p class="card-description">Get a detailed analysis of your current skills to identify strengths and areas for strategic development.</p>
-                    <a href="api/skill-api.php" class="card-link purple">Analyze My Skills &rarr;</a>
+                    <a href="skill-api.php" class="card-link purple">Analyze My Skills &rarr;</a>
                 </div>
                 
                 <!-- Job Recommendations Card -->
@@ -56,7 +56,7 @@ include('includes/header.php');
                         <h3 class="card-title">Job Recommendations</h3>
                     </div>
                     <p class="card-description">Discover job opportunities from top companies that are perfectly matched to your profile and skills.</p>
-                    <a href="#" class="card-link green">View Matched Jobs &rarr;</a>
+                    <a href="job-recommendations.php" class="card-link green">View Matched Jobs &rarr;</a>
                 </div>
 
                 <!-- Interview Prep Card -->
@@ -66,7 +66,7 @@ include('includes/header.php');
                         <h3 class="card-title">Interview Prep Kit</h3>
                     </div>
                     <p class="card-description">Practice common interview questions and get AI-powered feedback on your answers to build confidence.</p>
-                    <a href="#" class="card-link orange">Start Prep &rarr;</a>
+                    <a href="interview-prep-kit.php" class="card-link orange">Start Prep &rarr;</a>
                 </div>
             </div>
             
@@ -75,15 +75,15 @@ include('includes/header.php');
                  <h3 class="widget-title">Latest News & Career Articles</h3>
                  <ul class="article-list">
                      <li>
-                         <a href="#" target="_blank" class="article-title">The Top 10 In-Demand Tech Skills for 2025</a>
+                         <a href="https://www.researchgate.net/post/Top_10_In-Demand_Tech_Skills_for_2030_Future-Proof_Your_Career_in_a_Fast-Changing_World" target="_blank" class="article-title">The Top 10 In-Demand Tech Skills for 2025</a>
                          <span class="article-meta">From TechCrunch | 5 min read</span>
                      </li>
                      <li>
-                         <a href="#" target="_blank" class="article-title">How to Ace a Behavioral Interview: A Step-by-Step Guide</a>
+                         <a href="https://www.albright.edu/wp-content/uploads/2020/08/Behavioral-Interviewing-Guide.pdf" target="_blank" class="article-title">How to Ace a Behavioral Interview: A Step-by-Step Guide</a>
                          <span class="article-meta">From LinkedIn Careers Blog | 8 min read</span>
                      </li>
                      <li>
-                         <a href="#" target="_blank" class="article-title">Networking in the Digital Age: Building Real Connections</a>
+                         <a href="https://dcpweb.co.uk/blog/the-art-of-digital-networking-building-connections-that-matter" target="_blank" class="article-title">Networking in the Digital Age: Building Real Connections</a>
                          <span class="article-meta">From Forbes | 6 min read</span>
                      </li>
                  </ul>
@@ -105,8 +105,8 @@ include('includes/header.php');
                 <h3 class="widget-title">Quick Actions</h3>
                 <ul class="quick-actions-list">
                     <li><a href="user-settings.php"><i class="fas fa-user-edit"></i> Update Your Profile</a></li>
-                    <li><a href="#"><i class="fas fa-bookmark"></i> View Saved Jobs</a></li>
-                    <li><a href="#"><i class="fas fa-tasks"></i> Retake Aptitude Test</a></li>
+                    <li><a href="job-recommendations.php"><i class="fas fa-bookmark"></i> View Saved Jobs</a></li>
+                    <li><a href="test.php"><i class="fas fa-tasks"></i> Retake Aptitude Test</a></li>
                     <li><a href="#"><i class="fas fa-headset"></i> Contact Support</a></li>
                 </ul>
             </div>

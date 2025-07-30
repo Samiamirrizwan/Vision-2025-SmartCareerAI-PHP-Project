@@ -7,8 +7,6 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// 1. Include the database connection
-// This assumes user-settings.php is in the root project folder, next to the 'includes' folder.
 require_once '../includes/db.php';
 
 $user_id = $_SESSION['user_id'];
@@ -16,40 +14,32 @@ $user = null;
 $error_message = '';
 $success_message = '';
 
-// Fetch current user details using MySQLi
-$sql = "SELECT name, email, theme, categories, profile_image FROM users WHERE id = ?";
-$stmt = mysqli_prepare($conn, $sql);
+// Fetch current user details
+$stmt = $conn->prepare("SELECT name, email, theme, categories, profile_image FROM users WHERE id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+$stmt->close();
 
-if ($stmt) {
-    mysqli_stmt_bind_param($stmt, "i", $user_id);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    $user = mysqli_fetch_assoc($result);
-    mysqli_stmt_close($stmt);
-
-    // If user exists in session but not in DB, force logout
-    if (!$user) {
-        session_destroy();
-        header('Location: login.php?error=user_not_found');
-        exit();
-    }
-} else {
-    // For production, log this error instead of displaying it
-    die("Error preparing the user data query: " . mysqli_error($conn));
+if (!$user) {
+    session_destroy();
+    header('Location: login.php?error=user_not_found');
+    exit();
 }
 
-// Handle form submission to update settings
+// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Sanitize and validate form data
     $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-    $theme = $_POST['theme'] === 'light' ? 'light' : 'dark'; // Whitelist the theme value
+    $theme = $_POST['theme'] === 'light' ? 'light' : 'dark';
     $categories = filter_input(INPUT_POST, 'categories', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $profile_image_path = $user['profile_image']; // Default to old image
+    $profile_image_path = $user['profile_image'];
 
-    // Handle profile image upload
+    // Handle file upload
     if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] === UPLOAD_ERR_OK) {
-        $upload_dir = 'uploads/'; // Create an 'uploads' folder in your project root
+        $upload_dir = 'uploads/';
         if (!is_dir($upload_dir)) {
             mkdir($upload_dir, 0755, true);
         }
@@ -58,7 +48,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $target_file = $upload_dir . $img_name;
         $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-        // Validate file type and size (e.g., max 2MB)
         $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
         if (in_array($imageFileType, $allowed_types) && $_FILES['profile_image']['size'] <= 2000000) {
             if (move_uploaded_file($_FILES['profile_image']['tmp_name'], $target_file)) {
@@ -67,34 +56,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $error_message = "Sorry, there was an error uploading your file.";
             }
         } else {
-            $error_message = "Invalid file type or size (max 2MB). Allowed types: jpg, png, gif.";
+            $error_message = "Invalid file type or size (max 2MB).";
         }
     }
 
-    // If no upload error, proceed to update the database
     if (empty($error_message) && $email) {
-        $update_sql = "UPDATE users SET name = ?, email = ?, theme = ?, categories = ?, profile_image = ? WHERE id = ?";
-        $update_stmt = mysqli_prepare($conn, $update_sql);
+        $update_stmt = $conn->prepare("UPDATE users SET name = ?, email = ?, theme = ?, categories = ?, profile_image = ? WHERE id = ?");
+        $update_stmt->bind_param("sssssi", $name, $email, $theme, $categories, $profile_image_path, $user_id);
         
-        if ($update_stmt) {
-            mysqli_stmt_bind_param($update_stmt, "sssssi", $name, $email, $theme, $categories, $profile_image_path, $user_id);
-            if (mysqli_stmt_execute($update_stmt)) {
-                $_SESSION['user_name'] = $name; // Update session with the new name
-                header('Location: user-settings.php?success=1'); // Redirect to show success
-                exit();
-            } else {
-                $error_message = "Database update failed. Please try again.";
-            }
-            mysqli_stmt_close($update_stmt);
+        if ($update_stmt->execute()) {
+            $_SESSION['user_name'] = $name;
+            header('Location: user-settings.php?success=1');
+            exit();
         } else {
-            $error_message = "Error preparing the update query: " . mysqli_error($conn);
+            $error_message = "Database update failed. Please try again.";
         }
+        $update_stmt->close();
     } elseif (!$email) {
         $error_message = "The provided email address is not valid.";
     }
 }
 
-// 2. Include the header AFTER all PHP logic.
 include_once 'includes/header.php';
 ?>
 
@@ -110,7 +92,7 @@ include_once 'includes/header.php';
         <div class="alert error"><?php echo htmlspecialchars($error_message); ?></div>
     <?php endif; ?>
 
-    <?php if ($user): // Only show the form if user data was successfully fetched ?>
+    <?php if ($user): ?>
     <form action="user-settings.php" method="POST" enctype="multipart/form-data" class="settings-form">
         
         <div class="form-group">
@@ -152,6 +134,5 @@ include_once 'includes/header.php';
 </main>
 
 <?php
-// 3. Include the footer at the very end.
 include_once 'includes/footer.php';
 ?>

@@ -1,101 +1,84 @@
 <?php
 session_start();
-// **FIXED**: Check for 'user_id' instead of 'email'
+// Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
-  header("Location: ../login.php");
-  exit;
+    header("Location: ../login.php");
+    exit;
 }
-// **FIXED**: Correct path to header
-include('includes/header.php'); 
+
+// Include database connection and site header
+require_once('includes/db.php');
+include('includes/header.php');
+
+// Fetch questions from the database
+$questions = [];
+$sql = "SELECT id, question_text, option_a, option_b, option_c, option_d FROM test_questions ORDER BY id";
+$result = mysqli_query($conn, $sql);
+if ($result) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        // Re-structure the options into a nested array for easier handling in JS
+        $questions[] = [
+            'id' => $row['id'],
+            'question' => $row['question_text'],
+            'options' => [
+                'a' => $row['option_a'],
+                'b' => $row['option_b'],
+                'c' => $row['option_c'],
+                'd' => $row['option_d']
+            ]
+        ];
+    }
+}
+$questions_json = json_encode($questions);
 ?>
-<main class="p-8 max-w-7xl mx-auto">
-    <div class="bg-white p-8 rounded-lg shadow-md test-container">
-        <h2 class="text-2xl font-bold text-gray-800 mb-4">Career Aptitude Test</h2>
+
+<!-- Container for the 3D particles animation -->
+<div id="particles-js"></div>
+
+<!-- The main content now correctly uses the content-wrapper class from the overall layout -->
+<main class="content-wrapper" style="position: relative; z-index: 2;">
+    <div class="test-container animated-card">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Career Aptitude Test</h1>
+                <p class="page-subtitle">Answer the questions to discover career paths that align with your personality and interests.</p>
+            </div>
+        </div>
+        
         <form action="results.php" method="post" id="career-test-form">
-            <div class="test-step">
-                <div class="test-question">
-                    <label>1. Do you enjoy solving technical problems?</label>
-                    <div class="test-options">
-                        <div class="test-option">
-                            <input type="radio" name="q1" value="yes" id="q1_yes" class="mr-2">
-                            <label for="q1_yes">Yes</label>
-                        </div>
-                        <div class="test-option">
-                            <input type="radio" name="q1" value="no" id="q1_no" class="mr-2">
-                            <label for="q1_no">No</label>
-                        </div>
-                    </div>
-                </div>
+            <!-- Container where JavaScript will inject the questions -->
+            <div id="test-questions-container">
+                <!-- Loader will be shown by JS if no questions are found -->
             </div>
-            <div class="test-step">
-                <div class="test-question">
-                    <label>2. Are you interested in creative activities such as writing, designing, or arts?</label>
-                    <div class="test-options">
-                        <div class="test-option">
-                            <input type="radio" name="q2" value="yes" id="q2_yes" class="mr-2">
-                            <label for="q2_yes">Yes</label>
-                        </div>
-                        <div class="test-option">
-                            <input type="radio" name="q2" value="no" id="q2_no" class="mr-2">
-                            <label for="q2_no">No</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="test-step">
-                <div class="test-question">
-                    <label>3. Do you like working with numbers and data analysis?</label>
-                    <div class="test-options">
-                        <div class="test-option">
-                            <input type="radio" name="q3" value="yes" id="q3_yes" class="mr-2">
-                            <label for="q3_yes">Yes</label>
-                        </div>
-                        <div class="test-option">
-                            <input type="radio" name="q3" value="no" id="q3_no" class="mr-2">
-                            <label for="q3_no">No</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="test-step">
-                <div class="test-question">
-                    <label>4. Are you comfortable leading a team and making decisions?</label>
-                    <div class="test-options">
-                        <div class="test-option">
-                            <input type="radio" name="q4" value="yes" id="q4_yes" class="mr-2">
-                            <label for="q4_yes">Yes</label>
-                        </div>
-                        <div class="test-option">
-                            <input type="radio" name="q4" value="no" id="q4_no" class="mr-2">
-                            <label for="q4_no">No</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="test-step">
-                <div class="test-question">
-                    <label>5. Do you enjoy helping and interacting with people?</label>
-                    <div class="test-options">
-                        <div class="test-option">
-                            <input type="radio" name="q5" value="yes" id="q5_yes" class="mr-2">
-                            <label for="q5_yes">Yes</label>
-                        </div>
-                        <div class="test-option">
-                            <input type="radio" name="q5" value="no" id="q5_no" class="mr-2">
-                            <label for="q5_no">No</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
+            <!-- Test Navigation -->
             <div class="test-navigation">
-                <button type="button" class="test-prev bg-gray-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-600 cursor-pointer">Previous</button>
-                <button type="button" class="test-next bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 cursor-pointer">Next</button>
-                <input type="submit" value="Submit" class="test-submit bg-green-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-green-700 cursor-pointer">
-            </div>
-            <div class="test-progress">
-                <div class="test-progress-bar"></div>
+                <button type="button" id="test-prev" class="test-prev" disabled>Previous</button>
+                <div class="test-progress">
+                    <div class="test-progress-bar" id="test-progress-bar"></div>
+                </div>
+                <button type="button" id="test-next" class="test-next">Next</button>
+                <input type="submit" value="Submit" id="test-submit" class="test-submit" style="display: none;">
             </div>
         </form>
     </div>
 </main>
-<?php 
+
+<!-- Pass PHP questions to JavaScript -->
+<script>
+    const dbQuestions = <?php echo $questions_json; ?>;
+</script>
+
+<!-- Link to the dedicated CSS file for the test page -->
+<link rel="stylesheet" href="assets/css/test.css">
+
+<!-- Link to the Particles.js library -->
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+<!-- Link to the dedicated JavaScript for the test functionality -->
+<script src="assets/js/test.js"></script>
+
+<?php
+// The site footer is included last, after all main content and scripts.
+include('includes/footer.php');
+?>

@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     console.log("SmartCareerAI JS Initialized");
+
     // --- Live Clock Functionality ---
     const clockElement = document.getElementById('live-clock');
     function updateClock() {
@@ -11,88 +12,111 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     updateClock();
     setInterval(updateClock, 1000 * 60); // Update every minute
-    // --- Mobile Menu Toggle ---
+
+    // --- ENHANCED Mobile Menu Toggle ---
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
     const mainNav = document.getElementById('main-nav');
+    
     if (mobileMenuBtn && mainNav) {
+        const menuIcon = mobileMenuBtn.querySelector('i'); // Get the icon element
+
         mobileMenuBtn.addEventListener('click', () => {
-            mainNav.classList.toggle('active');
+            const isActive = mainNav.classList.toggle('active');
+            
+            // Prevent body from scrolling when the overlay is active
+            document.body.classList.toggle('no-scroll', isActive);
+
+             // --- ADD THIS LINE FOR ACCESSIBILITY ---
+        mobileMenuBtn.setAttribute('aria-expanded', isActive);
+
+
+            // Change icon from hamburger to 'X' and back
+            if (isActive) {
+                menuIcon.classList.remove('fa-bars');
+                menuIcon.classList.add('fa-times');
+            } else {
+                menuIcon.classList.remove('fa-times');
+                menuIcon.classList.add('fa-bars');
+            }
         });
+
+
+            // --- ADD THIS ENTIRE BLOCK TO CLOSE MENU ON LINK CLICK ---
+    mainNav.addEventListener('click', (e) => {
+        // Check if the clicked element is a link inside the nav
+        if (e.target.tagName === 'A' && mainNav.classList.contains('active')) {
+            mainNav.classList.remove('active');
+            document.body.classList.remove('no-scroll');
+            mobileMenuBtn.setAttribute('aria-expanded', 'false');
+            
+            // Reset menu icon
+            if (menuIcon) {
+                menuIcon.classList.remove('fa-times');
+                menuIcon.classList.add('fa-bars');
+            }
+        }
+    });
+
+    
     }
-    // --- Modal Handling ---
-    // ... existing modal handling code ...
+
+    
+
     // --- Test Form Multi-step and Validation ---
     const testForm = document.getElementById('career-test-form');
     if (testForm) {
+        // (Your existing test form JS logic remains unchanged here)
         const questions = testForm.querySelectorAll('.test-step');
-        const prevBtn = testForm.querySelector('.test-prev');
-        const nextBtn = testForm.querySelector('.test-next');
-        const submitBtn = testForm.querySelector('.test-submit');
-        const progressBar = document.querySelector('.test-progress-bar');
-        let currentStep = 0;
-        // Initially hide all steps except the first
-        questions.forEach((step, index) => {
-            if (index !== 0) {
-                step.style.display = 'none';
+        if (questions.length > 0) {
+            const prevBtn = testForm.querySelector('.test-prev');
+            const nextBtn = testForm.querySelector('.test-next');
+            const submitBtn = testForm.querySelector('.test-submit');
+            const progressBar = document.querySelector('.test-progress-bar');
+            let currentStep = 0;
+
+            function updateProgress() {
+                const progress = ((currentStep + 1) / questions.length) * 100;
+                progressBar.style.width = `${progress}%`;
             }
-        });
-        // Update progress bar
-        function updateProgress() {
-            const progress = ((currentStep + 1) / questions.length) * 100;
-            progressBar.style.width = `${progress}%`;
-        }
-        // Navigation functions
-        function goToStep(step) {
-            // Hide current step
-            questions[currentStep].style.display = 'none';
-            // Show new step
-            currentStep = step;
-            questions[currentStep].style.display = 'block';
-            // Update buttons
-            if (currentStep === 0) {
-                prevBtn.style.display = 'none';
-            } else {
-                prevBtn.style.display = 'inline-block';
+
+            function goToStep(step) {
+                questions[currentStep].style.display = 'none';
+                currentStep = step;
+                questions[currentStep].style.display = 'block';
+
+                prevBtn.style.display = (currentStep === 0) ? 'none' : 'inline-block';
+                nextBtn.style.display = (currentStep === questions.length - 1) ? 'none' : 'inline-block';
+                submitBtn.style.display = (currentStep === questions.length - 1) ? 'inline-block' : 'none';
+                
+                updateProgress();
             }
-            if (currentStep === questions.length - 1) {
-                nextBtn.style.display = 'none';
-                submitBtn.style.display = 'inline-block';
-            } else {
-                nextBtn.style.display = 'inline-block';
-                submitBtn.style.display = 'none';
-            }
-            updateProgress();
-        }
-        // Next button
-        nextBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            // Validate current step
-            const currentQuestion = questions[currentStep];
-            const selectedOption = currentQuestion.querySelector('input[type="radio"]:checked');
-            if (!selectedOption) {
-                alert('Please select an option before proceeding.');
-                return;
-            }
-            goToStep(currentStep + 1);
-        });
-        // Previous button
-        prevBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            goToStep(currentStep - 1);
-        });
-        // Submit button
-        submitBtn.addEventListener('click', (e) => {
-            // Final validation on submit
-            const currentQuestion = questions[currentStep];
-            const selectedOption = currentQuestion.querySelector('input[type="radio"]:checked');
-            if (!selectedOption) {
-                alert('Please select an option before submitting.');
+
+            nextBtn.addEventListener('click', (e) => {
                 e.preventDefault();
-            }
-        });
-        // Initialize
-        prevBtn.style.display = 'none';
-        submitBtn.style.display = 'none';
-        updateProgress();
+                const currentQuestion = questions[currentStep];
+                const selectedOption = currentQuestion.querySelector('input[type="radio"]:checked');
+                if (!selectedOption) {
+                    alert('Please select an option before proceeding.');
+                    return;
+                }
+                goToStep(currentStep + 1);
+            });
+
+            prevBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                goToStep(currentStep - 1);
+            });
+
+            testForm.addEventListener('submit', (e) => {
+                const currentQuestion = questions[currentStep];
+                const selectedOption = currentQuestion.querySelector('input[type="radio"]:checked');
+                if (!selectedOption) {
+                    alert('Please select an option before submitting.');
+                    e.preventDefault();
+                }
+            });
+            
+            goToStep(0);
+        }
     }
 });
