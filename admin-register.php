@@ -36,14 +36,12 @@ require_once 'includes/header.php';
                         <input type="email" name="email" id="email" class="form-input pl-10" required>
                     </div>
                 </div>
-                <div class="password-container">
                     <label for="password" class="block mb-2 text-sm font-medium text-gray-300">Password</label>
                     <div class="relative">
                         <i class="fas fa-lock absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
                         <input type="password" name="password" id="password" class="form-input pl-10 pr-10" required>
                         <i class="toggle-password fas fa-eye" data-target="#password"></i>
                     </div>
-                </div>
                  <div>
                     <label for="invite_code" class="block mb-2 text-sm font-medium text-gray-300">Invite Code</label>
                     <div class="relative">
