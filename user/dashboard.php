@@ -107,7 +107,7 @@ include('includes/header.php');
                     <li><a href="user-settings.php"><i class="fas fa-user-edit"></i> Update Your Profile</a></li>
                     <li><a href="job-recommendations.php"><i class="fas fa-bookmark"></i> View Saved Jobs</a></li>
                     <li><a href="test.php"><i class="fas fa-tasks"></i> Retake Aptitude Test</a></li>
-                    <li><a href="#"><i class="fas fa-headset"></i> Contact Support</a></li>
+                    <li><a href="../contact.php"><i class="fas fa-headset"></i> Contact Support</a></li>
                 </ul>
             </div>
 
