@@ -4,17 +4,23 @@
     background-color: #f9fafb; /* gray-50 */
 }
 
-.faq-answer {
+.faq-item .faq-answer {
     max-height: 0;
-    transition: max-height 0.5s ease-in-out, padding 0.5s ease;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out;
 }
 
 .faq-item.open .faq-answer {
-    /* max-height is set by JS */
-    padding-top: 1.25rem;
-    padding-bottom: 1.25rem;
+    /* max-height is set by JS to the element's scrollHeight */
+    border-top: 1px solid #e5e7eb; /* gray-200 */
 }
+
+/* The padding is now on the <p> tag inside, so we don't need to transition it */
 
 .faq-question i {
     transition: transform 0.3s ease-in-out;
+}
+
+.faq-item.open .faq-question i {
+    transform: rotate(180deg);
 }

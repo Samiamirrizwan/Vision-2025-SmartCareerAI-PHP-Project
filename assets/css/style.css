@@ -129,6 +129,20 @@ body {
     font-weight: 500;
 }
 
+/* NEW: Site Logo Styling */
+.site-logo {
+    transition: var(--transition-fast);
+    color: inherit; /* Inherit color from parent */
+}
+.site-logo:hover {
+    color: var(--color-primary-light);
+    text-shadow: 0 0 12px rgba(96, 165, 250, 0.8);
+}
+#main-header.bg-white .site-logo:hover {
+    color: var(--color-primary);
+    text-shadow: 0 0 12px rgba(59, 130, 246, 0.6);
+}
+
 .nav-link {
     position: relative;
     transition: color 0.3s ease;
@@ -171,6 +185,8 @@ body {
     cursor: pointer;
     transition: var(--transition-fast);
     border: none;
+    position: relative; /* Needed for stacking context */
+    z-index: 2; /* Ensure buttons are on top */
 }
 
 .btn-primary {
@@ -523,6 +539,10 @@ body {
     border: none;
     cursor: pointer;
 }
+/* NEW: Added transition for the icon rotation */
+.faq-question i {
+    transition: transform 0.4s ease-in-out;
+}
 .faq-answer {
     max-height: 0;
     overflow: hidden;
@@ -550,6 +570,8 @@ body {
 .blog-content {
     font-size: 1.1rem;
     line-height: 1.7;
+    position: relative; /* Ensure content is in a stacking context */
+    z-index: 2;
 }
 .blog-content h2 {
     font-size: 2.25rem;
@@ -582,4 +604,99 @@ body {
     text-align: center;
     color: #6b7280; /* Gray 500 */
     margin-top: 0.75rem;
+}
+
+/* ===================================================================
+   12. UX ENHANCEMENTS & BLOG STYLES (NEW)
+   =================================================================== */
+
+/* --- Page Loader --- */
+#page-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-dark-bg);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease;
+}
+#page-loader.fade-out {
+    opacity: 0;
+}
+.loader-dual-ring {
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+}
+.loader-dual-ring:after {
+    content: " ";
+    display: block;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border-radius: 50%;
+    border: 6px solid var(--color-primary-light);
+    border-color: var(--color-primary-light) transparent var(--color-primary-light) transparent;
+    animation: loader-dual-ring 1.2s linear infinite;
+}
+@keyframes loader-dual-ring {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* --- Mouse Glow Effect --- */
+#mouse-glow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0) 60%);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 999;
+    transition: background 0.3s ease, transform 0.05s ease-out; /* Smoother follow */
+}
+/* MODIFIED: Show glow on blog pages AND on hover over site-logo */
+body.blog-page #mouse-glow,
+.site-logo:hover ~ #mouse-glow {
+    display: block;
+}
+body:not(.blog-page) #mouse-glow {
+    display: none;
+}
+
+
+/* --- Blog Post Tilt Card --- */
+.blog-tilt-wrapper {
+    background-color: white;
+    border-radius: 0.75rem;
+    box-shadow: var(--shadow-lg);
+    transform-style: preserve-3d; /* Required for tilt effect */
+    will-change: transform;
+    transition: box-shadow 0.4s ease, transform 0.1s ease;
+}
+.blog-tilt-wrapper:hover {
+     box-shadow: 0 30px 40px -10px rgb(0 0 0 / 0.3);
+}
+/* FIXED: This makes the glare effect unclickable, allowing clicks to pass through */
+.blog-tilt-wrapper .js-tilt-glare {
+    pointer-events: none;
+}
+
+
+/* --- Scroll Reveal Animations --- */
+.reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
 }

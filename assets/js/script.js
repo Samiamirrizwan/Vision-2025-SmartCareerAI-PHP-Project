@@ -20,20 +20,26 @@ document.addEventListener('DOMContentLoaded', () => {
             adminDropdownContainer: document.getElementById('admin-dropdown-container'),
             adminDropdownButton: document.getElementById('admin-dropdown-button'),
             adminDropdownMenu: document.getElementById('admin-dropdown-menu'),
-            // NEW: Blog dropdown elements
+            // Blog dropdown elements
             blogDropdownContainer: document.getElementById('blog-dropdown-container'),
             blogDropdownButton: document.getElementById('blog-dropdown-button'),
             blogDropdownMenu: document.getElementById('blog-dropdown-menu'),
-            // NEW: FAQ elements
+            // FAQ elements
             faqAccordion: document.getElementById('faq-accordion'),
-            // NEW: Contact form elements
+            // Contact form elements
             contactForm: document.getElementById('contact-form'),
+            // UX Enhancement Elements
+            pageLoader: document.getElementById('page-loader'),
+            mouseGlow: document.getElementById('mouse-glow'),
+            tiltElements: document.querySelectorAll('.blog-tilt-wrapper'),
+            revealElements: document.querySelectorAll('.reveal'),
         },
         state: {
             currentPage: document.body.dataset.page || 'unknown',
+            isBlogPage: document.body.classList.contains('blog-page'),
             isMenuOpen: false,
             isAdminDropdownOpen: false,
-            isBlogDropdownOpen: false, // NEW
+            isBlogDropdownOpen: false,
             headerHeight: 0
         },
         config: {
@@ -60,11 +66,12 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(`SmartCareerAI JS Initializing for page: ${this.state.currentPage} 🚀`);
             this.state.headerHeight = this.elements.header ? this.elements.header.offsetHeight : 0;
             
+            this.initPageLoader();
             this.initMobileMenu();
             this.initPasswordToggle();
             this.initScrollToTop();
             this.initAdminDropdown();
-            this.initBlogDropdown(); // NEW
+            this.initBlogDropdown();
             
             if (this.state.currentPage === 'home.php') {
                 this.initHeaderScrollBehavior();
@@ -73,22 +80,75 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (this.elements.particleContainer) this.initParticleEffect();
             }
 
-            if (this.state.currentPage === 'faq.php') {
-                this.initFaqAccordion(); // NEW
+            if (this.state.currentPage === 'faqs.php') {
+                this.initFaqAccordion();
             }
 
             if (this.state.currentPage === 'contact.php') {
-                this.initContactForm(); // NEW
+                this.initContactForm();
+            }
+
+            // Run blog-specific enhancements
+            if (this.state.isBlogPage || document.querySelector('.site-logo')) {
+                this.initMouseGlow();
+            }
+            if (this.state.isBlogPage) {
+                this.initTiltEffect();
+                this.initScrollAnimations();
             }
 
             window.addEventListener('resize', this.utils.throttle(() => {
                 this.state.headerHeight = this.elements.header ? this.elements.header.offsetHeight : 0;
             }, 200));
         },
+
+        initPageLoader() {
+            window.addEventListener('load', () => {
+                if(this.elements.pageLoader) {
+                    this.elements.pageLoader.classList.add('fade-out');
+                    setTimeout(() => {
+                        this.elements.pageLoader.style.display = 'none';
+                    }, 500);
+                }
+            });
+        },
         
-        /**
-         * NEW: Handles Blog dropdown menu logic.
-         */
+        initMouseGlow() {
+            if (!this.elements.mouseGlow) return;
+            document.addEventListener('mousemove', (e) => {
+                // Use requestAnimationFrame for smoother animation
+                window.requestAnimationFrame(() => {
+                    this.elements.mouseGlow.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
+                });
+            });
+        },
+
+        initTiltEffect() {
+            if (this.elements.tiltElements.length > 0 && typeof VanillaTilt !== 'undefined') {
+                VanillaTilt.init(this.elements.tiltElements, {
+                    max: 5,
+                    speed: 400,
+                    glare: true,
+                    "max-glare": 0.1,
+                    "transform-style": "preserve-3d"
+                });
+            }
+        },
+        
+        initScrollAnimations() {
+            if (this.elements.revealElements.length === 0) return;
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            this.elements.revealElements.forEach(el => observer.observe(el));
+        },
+        
         initBlogDropdown() {
             const { blogDropdownButton, blogDropdownMenu, blogDropdownContainer } = this.elements;
             if (!blogDropdownButton || !blogDropdownMenu || !blogDropdownContainer) return;
@@ -101,7 +161,6 @@ document.addEventListener('DOMContentLoaded', () => {
             
             blogDropdownButton.addEventListener('click', toggleDropdown);
 
-            // Close dropdown if clicked outside
             document.addEventListener('click', (e) => {
                 if (this.state.isBlogDropdownOpen && !blogDropdownContainer.contains(e.target)) {
                     this.state.isBlogDropdownOpen = false;
@@ -110,9 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         },
 
-        /**
-         * Handles Admin dropdown menu logic.
-         */
         initAdminDropdown() {
             const { adminDropdownButton, adminDropdownMenu, adminDropdownContainer } = this.elements;
             if (!adminDropdownButton || !adminDropdownMenu || !adminDropdownContainer) return;
@@ -123,7 +179,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 adminDropdownMenu.classList.toggle('hidden', !this.state.isAdminDropdownOpen);
             });
             
-            // Close dropdown if clicked outside
             document.addEventListener('click', (e) => {
                 if (this.state.isAdminDropdownOpen && !adminDropdownContainer.contains(e.target)) {
                     this.state.isAdminDropdownOpen = false;
@@ -229,33 +284,39 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         
         /**
-         * NEW: Initializes the FAQ accordion functionality.
+         * FIXED: Initializes the FAQ accordion with more robust checks.
          */
         initFaqAccordion() {
-            if (!this.elements.faqAccordion) return;
-            const questions = this.elements.faqAccordion.querySelectorAll('.faq-question');
-            questions.forEach(question => {
-                question.addEventListener('click', () => {
-                    const item = question.parentElement;
-                    const answer = question.nextElementSibling;
-                    const icon = question.querySelector('i');
+            if (!this.elements.faqAccordion) {
+                console.warn('FAQ container with id="faq-accordion" not found.');
+                return;
+            }
+            // Use event delegation for better performance and flexibility
+            this.elements.faqAccordion.addEventListener('click', (e) => {
+                const question = e.target.closest('.faq-question');
+                if (!question) return; // Exit if the click was not on a question button
 
-                    item.classList.toggle('open');
-                    
-                    if (item.classList.contains('open')) {
-                        answer.style.maxHeight = answer.scrollHeight + 'px';
-                        icon.style.transform = 'rotate(180deg)';
-                    } else {
-                        answer.style.maxHeight = '0';
-                        icon.style.transform = 'rotate(0deg)';
-                    }
-                });
+                const item = question.parentElement;
+                const answer = question.nextElementSibling;
+                const icon = question.querySelector('i');
+
+                if (!item || !answer) {
+                    console.warn('FAQ item has incorrect structure.', item);
+                    return;
+                }
+
+                const isOpen = item.classList.toggle('open');
+                
+                if (isOpen) {
+                    answer.style.maxHeight = answer.scrollHeight + 'px';
+                    if (icon) icon.style.transform = 'rotate(180deg)';
+                } else {
+                    answer.style.maxHeight = '0';
+                    if (icon) icon.style.transform = 'rotate(0deg)';
+                }
             });
         },
 
-        /**
-         * NEW: Initializes contact form validation and submission spinner.
-         */
         initContactForm() {
             if (!this.elements.contactForm) return;
 
@@ -264,7 +325,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const btnText = submitBtn.querySelector('.btn-text');
                 const loader = submitBtn.querySelector('.loader');
 
-                // Basic validation check
                 let isValid = true;
                 e.target.querySelectorAll('[required]').forEach(input => {
                     if (!input.value.trim()) {
@@ -281,7 +341,6 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         initParticleEffect() {
-            // This function remains unchanged
             const { particleContainer } = this.elements;
             if(!particleContainer) return;
             const fragment = document.createDocumentFragment();

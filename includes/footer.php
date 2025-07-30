@@ -2,6 +2,8 @@
     $isBlogPageFooter = strpos($_SERVER['REQUEST_URI'], '/blogs/') !== false;
     $footerBasePath = $isBlogPageFooter ? '../' : './';
 ?>
+    <div id="mouse-glow"></div>
+
     <footer class="bg-gray-900 text-gray-400 py-12 relative z-10">
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -44,6 +46,8 @@
             </div>
         </div>
     </footer>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.2/dist/vanilla-tilt.min.js"></script>
     <script src="<?php echo $footerBasePath; ?>assets/js/script.js"></script>
 </body>
 </html>

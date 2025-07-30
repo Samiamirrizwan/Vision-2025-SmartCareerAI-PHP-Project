@@ -24,6 +24,12 @@
     }
     // Determine the base path for assets and includes
     $basePath = $isBlogPage ? '../' : './';
+
+    // Body class
+    $bodyClasses = '';
+    if ($isAuthPage) $bodyClasses .= 'register-page-body ';
+    if ($isBlogPage) $bodyClasses .= 'blog-page ';
+
     // --- DYNAMIC CLASSES END ---
 ?>
 
@@ -40,14 +46,24 @@
     <link rel="stylesheet" href="<?php echo $basePath; ?>assets/css/style.css">
 </head>
 
-<body data-page="<?php echo htmlspecialchars($currentPage); ?>" class="<?php if($isAuthPage) echo 'register-page-body'; ?>"> 
+<body data-page="<?php echo htmlspecialchars($currentPage); ?>" class="<?php echo trim($bodyClasses); ?>"> 
+
+    <!-- Page Loader -->
+    <div id="page-loader">
+        <div class="loader-dual-ring"></div>
+    </div>
+    
     <?php if ($currentPage == 'home.php'): ?>
         <div id="particle-container"></div>
     <?php endif; ?>
 
     <header id="main-header" class="<?php echo $headerClasses; ?>">
         <div class="<?php echo $headerContainerClasses; ?>">
-            <a href="<?php echo $basePath; ?>home.php" class="text-2xl font-bold">Smart Career AI</a>
+            <!-- MODIFIED: Added icon and site-logo class -->
+            <a href="<?php echo $basePath; ?>home.php" class="text-2xl font-bold flex items-center site-logo">
+                <i class="fas fa-brain mr-2 text-2xl"></i>
+                <span>Smart Career AI</span>
+            </a>
             
             <nav class="hidden md:flex items-center space-x-6 nav-links">
                 <a href="<?php echo $basePath; ?>home.php#home" class="nav-link <?php if($currentPage == 'home.php') echo 'active'; ?>">Home</a>
