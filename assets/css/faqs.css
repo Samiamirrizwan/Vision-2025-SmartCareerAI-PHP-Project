@@ -1,0 +1,20 @@
+/* /assets/css/faqs.css */
+.faqs-page-main {
+    padding-top: 80px; /* Adjust for fixed header */
+    background-color: #f9fafb; /* gray-50 */
+}
+
+.faq-answer {
+    max-height: 0;
+    transition: max-height 0.5s ease-in-out, padding 0.5s ease;
+}
+
+.faq-item.open .faq-answer {
+    /* max-height is set by JS */
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
+}
+
+.faq-question i {
+    transition: transform 0.3s ease-in-out;
+}

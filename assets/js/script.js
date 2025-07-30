@@ -16,15 +16,24 @@ document.addEventListener('DOMContentLoaded', () => {
             navLinks: document.querySelectorAll('.nav-link'),
             sections: document.querySelectorAll('section[id]'),
             scrollToTopBtn: null,
-            // NEW: Admin dropdown elements
+            // Admin dropdown elements
             adminDropdownContainer: document.getElementById('admin-dropdown-container'),
             adminDropdownButton: document.getElementById('admin-dropdown-button'),
             adminDropdownMenu: document.getElementById('admin-dropdown-menu'),
+            // NEW: Blog dropdown elements
+            blogDropdownContainer: document.getElementById('blog-dropdown-container'),
+            blogDropdownButton: document.getElementById('blog-dropdown-button'),
+            blogDropdownMenu: document.getElementById('blog-dropdown-menu'),
+            // NEW: FAQ elements
+            faqAccordion: document.getElementById('faq-accordion'),
+            // NEW: Contact form elements
+            contactForm: document.getElementById('contact-form'),
         },
         state: {
             currentPage: document.body.dataset.page || 'unknown',
             isMenuOpen: false,
-            isAdminDropdownOpen: false, // NEW
+            isAdminDropdownOpen: false,
+            isBlogDropdownOpen: false, // NEW
             headerHeight: 0
         },
         config: {
@@ -54,22 +63,55 @@ document.addEventListener('DOMContentLoaded', () => {
             this.initMobileMenu();
             this.initPasswordToggle();
             this.initScrollToTop();
-            this.initAdminDropdown(); // NEW
-
-            if (this.state.currentPage === 'index.php') {
+            this.initAdminDropdown();
+            this.initBlogDropdown(); // NEW
+            
+            if (this.state.currentPage === 'home.php') {
                 this.initHeaderScrollBehavior();
                 this.initNavScrollObserver();
                 this.initSmoothScroll();
                 if (this.elements.particleContainer) this.initParticleEffect();
             }
 
+            if (this.state.currentPage === 'faq.php') {
+                this.initFaqAccordion(); // NEW
+            }
+
+            if (this.state.currentPage === 'contact.php') {
+                this.initContactForm(); // NEW
+            }
+
             window.addEventListener('resize', this.utils.throttle(() => {
                 this.state.headerHeight = this.elements.header ? this.elements.header.offsetHeight : 0;
             }, 200));
         },
+        
+        /**
+         * NEW: Handles Blog dropdown menu logic.
+         */
+        initBlogDropdown() {
+            const { blogDropdownButton, blogDropdownMenu, blogDropdownContainer } = this.elements;
+            if (!blogDropdownButton || !blogDropdownMenu || !blogDropdownContainer) return;
+
+            const toggleDropdown = (e) => {
+                 e.stopPropagation();
+                 this.state.isBlogDropdownOpen = !this.state.isBlogDropdownOpen;
+                 blogDropdownMenu.classList.toggle('hidden', !this.state.isBlogDropdownOpen);
+            };
+            
+            blogDropdownButton.addEventListener('click', toggleDropdown);
+
+            // Close dropdown if clicked outside
+            document.addEventListener('click', (e) => {
+                if (this.state.isBlogDropdownOpen && !blogDropdownContainer.contains(e.target)) {
+                    this.state.isBlogDropdownOpen = false;
+                    blogDropdownMenu.classList.add('hidden');
+                }
+            });
+        },
 
         /**
-         * NEW: Handles Admin dropdown menu logic.
+         * Handles Admin dropdown menu logic.
          */
         initAdminDropdown() {
             const { adminDropdownButton, adminDropdownMenu, adminDropdownContainer } = this.elements;
@@ -183,6 +225,58 @@ document.addEventListener('DOMContentLoaded', () => {
             window.addEventListener('scroll', this.utils.throttle(handleScroll, 200));
             btn.addEventListener('click', () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        },
+        
+        /**
+         * NEW: Initializes the FAQ accordion functionality.
+         */
+        initFaqAccordion() {
+            if (!this.elements.faqAccordion) return;
+            const questions = this.elements.faqAccordion.querySelectorAll('.faq-question');
+            questions.forEach(question => {
+                question.addEventListener('click', () => {
+                    const item = question.parentElement;
+                    const answer = question.nextElementSibling;
+                    const icon = question.querySelector('i');
+
+                    item.classList.toggle('open');
+                    
+                    if (item.classList.contains('open')) {
+                        answer.style.maxHeight = answer.scrollHeight + 'px';
+                        icon.style.transform = 'rotate(180deg)';
+                    } else {
+                        answer.style.maxHeight = '0';
+                        icon.style.transform = 'rotate(0deg)';
+                    }
+                });
+            });
+        },
+
+        /**
+         * NEW: Initializes contact form validation and submission spinner.
+         */
+        initContactForm() {
+            if (!this.elements.contactForm) return;
+
+            this.elements.contactForm.addEventListener('submit', (e) => {
+                const submitBtn = e.target.querySelector('#contact-submit-btn');
+                const btnText = submitBtn.querySelector('.btn-text');
+                const loader = submitBtn.querySelector('.loader');
+
+                // Basic validation check
+                let isValid = true;
+                e.target.querySelectorAll('[required]').forEach(input => {
+                    if (!input.value.trim()) {
+                        isValid = false;
+                    }
+                });
+
+                if (isValid) {
+                    btnText.style.display = 'none';
+                    loader.style.display = 'inline-block';
+                    submitBtn.disabled = true;
+                }
             });
         },
 

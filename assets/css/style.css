@@ -453,3 +453,133 @@ body {
     transform: rotate(360deg);
   }
 }
+
+/* ===================================================================
+   11. NEW STYLES (Added as per request)
+   =================================================================== */
+
+/* --- Enhanced About Section --- */
+.about-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border-color);
+    padding: 2rem;
+    border-radius: 0.75rem;
+    transition: var(--transition-medium);
+}
+.about-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-glow-primary);
+    background: rgba(255, 255, 255, 0.1);
+}
+.about-icon {
+    font-size: 2.5rem;
+    color: var(--color-primary-light);
+    margin-bottom: 1.5rem;
+    display: inline-block;
+}
+
+/* --- Contact Page --- */
+.contact-hero {
+    background-image: linear-gradient(rgba(10, 10, 26, 0.7), rgba(10, 10, 26, 0.7)), url('../../assets/img/banner-1.jpeg');
+    background-size: cover;
+    background-position: center;
+}
+.contact-icon {
+    flex-shrink: 0;
+    width: 3rem;
+    height: 3rem;
+    background-color: rgba(59, 130, 246, 0.1);
+    color: var(--color-primary-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+}
+
+/* --- FAQ Page --- */
+.faq-item {
+    background-color: var(--color-dark-surface);
+    border-radius: 0.5rem;
+    border: 1px solid var(--glass-border-color);
+    overflow: hidden;
+    transition: var(--transition-fast);
+}
+.faq-item:hover {
+    border-color: var(--color-primary);
+}
+.faq-question {
+    width: 100%;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-light-text);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out;
+}
+.faq-answer p {
+    padding: 0 1.5rem 1.5rem;
+    color: var(--color-medium-text);
+    line-height: 1.6;
+}
+
+/* --- Blog Page --- */
+.blog-header {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+}
+.blog-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.4));
+    z-index: 1;
+}
+.blog-content {
+    font-size: 1.1rem;
+    line-height: 1.7;
+}
+.blog-content h2 {
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin-top: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: #111827; /* Gray 900 */
+}
+.blog-content p {
+    margin-bottom: 1.25rem;
+}
+.blog-content ul {
+    list-style-type: disc;
+    padding-left: 2rem;
+    margin-bottom: 1.25rem;
+}
+.blog-content li {
+    margin-bottom: 0.75rem;
+}
+.blog-content .lead {
+    font-size: 1.25rem;
+    color: #4b5563; /* Gray 600 */
+    margin-bottom: 2rem;
+}
+.blog-content figure {
+    margin: 2.5rem 0;
+}
+.blog-content figcaption {
+    font-size: 0.9rem;
+    text-align: center;
+    color: #6b7280; /* Gray 500 */
+    margin-top: 0.75rem;
+}
