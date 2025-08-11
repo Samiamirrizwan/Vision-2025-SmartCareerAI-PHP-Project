@@ -57,6 +57,8 @@
 
 html {
     scroll-behavior: smooth;
+    /* FIX: Prevent horizontal scroll */
+    overflow-x: hidden;
 }
 
 body {
@@ -66,17 +68,59 @@ body {
     margin: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    position: relative; /* For background overlay */
+    /* FIX: Prevent horizontal scroll */
+    overflow-x: hidden;
 }
 
-/* Specific body classes for pages with different backgrounds */
-.register-page-body {
-    background-image: url('../../assets/img/background-1.jpeg');
+
+/* IMPROVEMENT: Unique, animated backgrounds for each authentication page.
+  These classes will be added by a script on their respective pages.
+*/
+/* ===================================================================
+   NEW: Page Background Overlay System
+   =================================================================== */
+
+/* Base styles for the overlay container */
+.page-background-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1; /* Sits behind all page content */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-attachment: fixed;
+    /* This animation creates the live moving effect */
+    animation: subtleZoom 40s alternate infinite ease-in-out;
 }
 
+/* Unique overlays for each page using a dark gradient for readability */
+/* For register.php -> background-1.jpeg */
+.register-page-overlay {
+    background-image: linear-gradient(rgba(10, 10, 26, 0), rgba(10, 10, 26, 0.7)), url('../../assets/img/background-1.jpeg');
+}
+
+/* For admin-login.php -> background-3.jpeg */
+.admin-login-page-overlay {
+    background-image: linear-gradient(rgba(10, 10, 26, 0.7), rgba(10, 10, 26, 0.7)), url('../../assets/img/background-3.jpeg');
+}
+
+/* For admin-register.php -> background-2.jpeg */
+.admin-register-page-overlay {
+    background-image: linear-gradient(rgba(10, 10, 26, 0.7), rgba(10, 10, 26, 0.7)), url('../../assets/img/background-2.jpeg');
+}
+
+/* Keyframe animation for the subtle zoom effect */
+@keyframes subtleZoom {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.1);
+    }
+}
 
 /* ===================================================================
    3. INTERACTIVE PARTICLE BACKGROUND
@@ -148,23 +192,31 @@ body {
     transition: color 0.3s ease;
 }
 
+/* Add this new class within section 5. BUTTONS */
+.active-dropdown-btn {
+    background-color: rgba(59, 130, 246, 0.2) !important;
+    border-color: var(--color-primary) !important;
+    color: var(--color-primary-light) !important;
+}
+
+/* Replace the existing .nav-link::after and .nav-link:hover::after rules in section 4. HEADER & NAVIGATION with this enhanced version */
 .nav-link::after {
     content: '';
     position: absolute;
     bottom: -5px;
-    left: 0;
+    left: 50%;
     width: 100%;
     height: 2px;
     background-color: var(--color-primary-light);
-    transform: scaleX(0);
-    transform-origin: bottom right;
-    transition: transform 0.3s ease-out;
+    transform: translateX(-50%) scaleX(0);
+    transform-origin: center;
+    /* This creates the fluid "motion trail" animation */
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .nav-link:hover::after,
 .nav-link.active::after {
-    transform: scaleX(1);
-    transform-origin: bottom left;
+    transform: translateX(-50%) scaleX(1);
 }
 
 .nav-link.active {
@@ -227,9 +279,11 @@ body {
     box-shadow: var(--shadow-md);
 }
 
+/* IMPROVEMENT: Enhanced hover effect for more fluidity */
 .form-container:hover {
     transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-lg), 0 0 25px rgba(96, 165, 250, 0.2);
+    border-color: rgba(96, 165, 250, 0.3);
 }
 
 .form-input {
@@ -367,10 +421,10 @@ body {
 
 @keyframes subtleZoom {
     from {
-        background-size: 100% 100%;
+        transform: scale(1);
     }
     to {
-        background-size: 110% 110%;
+        transform: scale(1.1);
     }
 }
 
@@ -423,11 +477,12 @@ body {
 /* ===================================================================
    10. UTILITY & LAYOUT CLASSES
    =================================================================== */
-.login-container {
+.login-container, .register-page-container {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    padding: 1rem;
     padding-top: 80px; /* Adjust based on header height */
 }
 
@@ -559,6 +614,8 @@ body {
     position: relative;
     background-size: cover;
     background-position: center;
+    /* IMPROVEMENT: Added subtle zoom animation for a "live" feel */
+    animation: subtleZoom 40s alternate infinite ease-in-out;
 }
 .blog-header::before {
     content: '';
@@ -566,6 +623,19 @@ body {
     top: 0; left: 0; right: 0; bottom: 0;
     background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.4));
     z-index: 1;
+}
+/* IMPROVEMENT: Reactive headline effect */
+.blog-header h1 {
+    transition: text-shadow 0.3s ease;
+    text-shadow: 
+        0 0 5px rgba(255, 255, 255, 0.5),
+        0 0 10px rgba(255, 255, 255, 0.3);
+}
+.blog-header h1:hover {
+    text-shadow: 
+        0 0 10px rgba(96, 165, 250, 0.8),
+        0 0 20px rgba(96, 165, 250, 0.6),
+        0 0 35px rgba(96, 165, 250, 0.4);
 }
 .blog-content {
     font-size: 1.1rem;
@@ -623,6 +693,8 @@ body {
     justify-content: center;
     align-items: center;
     transition: opacity 0.5s ease;
+    /* Ensure it's not clickable */
+    pointer-events: none;
 }
 #page-loader.fade-out {
     opacity: 0;
@@ -663,8 +735,7 @@ body {
     transition: background 0.3s ease, transform 0.05s ease-out; /* Smoother follow */
 }
 /* MODIFIED: Show glow on blog pages AND on hover over site-logo */
-body.blog-page #mouse-glow,
-.site-logo:hover ~ #mouse-glow {
+body.blog-page #mouse-glow {
     display: block;
 }
 body:not(.blog-page) #mouse-glow {
@@ -679,7 +750,8 @@ body:not(.blog-page) #mouse-glow {
     box-shadow: var(--shadow-lg);
     transform-style: preserve-3d; /* Required for tilt effect */
     will-change: transform;
-    transition: box-shadow 0.4s ease, transform 0.1s ease;
+    /* IMPROVEMENT: Transition is smoother and handled by JS, but this is a good fallback */
+    transition: box-shadow 0.4s ease, transform 0.4s ease;
 }
 .blog-tilt-wrapper:hover {
      box-shadow: 0 30px 40px -10px rgb(0 0 0 / 0.3);
@@ -694,7 +766,8 @@ body:not(.blog-page) #mouse-glow {
 .reveal {
     opacity: 0;
     transform: translateY(40px);
-    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    /* IMPROVEMENT: Added a smoother, more fluid easing function */
+    transition: opacity 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .reveal.visible {
     opacity: 1;

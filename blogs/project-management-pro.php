@@ -2,7 +2,7 @@
 
 <main class="pt-20 bg-gray-100">
     <article>
-        <header class="blog-header" style="background-image: url('https://images.unsplash.com/photo-1542744095-291d1f67b221?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');">
+        <header class="blog-header" style="background-image: url('../assets/img/project-management-banner-1.jpg');">
             <div class="container mx-auto px-4 py-32 text-center text-white relative z-10">
                 <h1 class="text-4xl md:text-6xl font-extrabold leading-tight reveal">From Plan to Launch: Becoming a Project Management Pro</h1>
                 <p class="mt-4 text-lg reveal" style="transition-delay: 150ms;">Posted on <time datetime="<?php echo date('Y-m-d'); ?>"><?php echo date('F j, Y'); ?></time></p>
@@ -26,7 +26,7 @@
                     </ul>
 
                     <figure class="reveal">
-                        <img src="https://images.unsplash.com/photo-1600880292210-859bb3fed531?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="A team collaborating around a Kanban board with sticky notes" class="rounded-lg shadow-lg w-full h-auto object-cover">
+                        <img src="../assets/img/project-management-pro-5.jpg" alt="A team collaborating around a Kanban board with sticky notes" class="rounded-lg shadow-lg w-full h-auto object-cover">
                         <figcaption>Agile methodologies promote teamwork and rapid iteration.</figcaption>
                     </figure>
 
@@ -51,5 +51,21 @@
         </div>
     </article>
 </main>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.2/dist/vanilla-tilt.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Add 'blog-page' class to the body to enable mouse glow effect
+        document.body.classList.add('blog-page');
+
+        // Initialize Vanilla Tilt for the 3D card effect
+        VanillaTilt.init(document.querySelector(".blog-tilt-wrapper"), {
+            max: 5,       // Max tilt rotation (degrees)
+            speed: 400,   // Speed of the enter/exit transition
+            glare: true,  // If it should have a "glare" effect
+            "max-glare": 0.2 // The opacity of the glare
+        });
+    });
+</script>
 
 <?php include '../includes/footer.php'; ?>

@@ -232,17 +232,54 @@ document.addEventListener('DOMContentLoaded', () => {
 
         initNavScrollObserver() {
             const { sections, navLinks } = this.elements;
-            if (sections.length === 0 || navLinks.length === 0) return;
-            const observer = new IntersectionObserver(entries => {
+            if (sections.length === 0 || navLinks.length === 0 || this.state.currentPage !== 'home.php') return;
+
+            // A map to keep track of which sections are currently intersecting
+            const intersectingState = new Map();
+
+            const observerCallback = (entries) => {
                 entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const id = entry.target.id;
-                        navLinks.forEach(link => {
-                            link.classList.toggle('active', link.getAttribute('href').includes(`#${id}`));
-                        });
+                    intersectingState.set(entry.target.id, entry.isIntersecting);
+                });
+
+                let currentActiveId = null;
+
+                // Find the ID of the last intersecting section from the top of the page
+                for (const section of sections) {
+                    if (intersectingState.get(section.id)) {
+                        currentActiveId = section.id;
+                        // No break here, we want the last one in the DOM order that is intersecting
+                    }
+                }
+                
+                navLinks.forEach(link => {
+                    const linkHref = link.getAttribute('href');
+                    if (linkHref && linkHref.includes('#')) { // Process only anchor links
+                        const linkId = linkHref.substring(linkHref.indexOf('#') + 1);
+                        
+                        // Set active if the link's ID matches the current active section ID
+                        if (linkId === currentActiveId) {
+                            link.classList.add('active');
+                        } else {
+                            link.classList.remove('active');
+                        }
                     }
                 });
-            }, { rootMargin: `-${this.state.headerHeight}px 0px -50% 0px` });
+
+                // Special case: if no section is active (e.g., at the very top), activate the 'home' link
+                if (!currentActiveId && window.scrollY < 200) {
+                     navLinks.forEach(link => link.classList.remove('active'));
+                     const homeLink = document.querySelector('.nav-links a[href*="#home"]');
+                     if(homeLink) homeLink.classList.add('active');
+                }
+            };
+
+            const observer = new IntersectionObserver(observerCallback, {
+                // Adjust rootMargin to trigger when the section top is near the bottom of the header
+                rootMargin: `-${this.state.headerHeight}px 0px -50% 0px`,
+                threshold: 0
+            });
+
             sections.forEach(section => observer.observe(section));
         },
 
