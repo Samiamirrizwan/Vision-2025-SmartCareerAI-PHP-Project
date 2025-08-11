@@ -1,17 +1,18 @@
 <?php
-
     // Get the current page filename to apply conditional styling
     $currentPage = basename($_SERVER['PHP_SELF']);
     $isAuthPage = in_array($currentPage, ['login.php', 'register.php', 'admin-login.php', 'admin-register.php', 'forgot-password.php', 'reset-password.php']);
 
-    // --- DYNAMIC CLASSES START ---
+    // --- DYNAMIC CLASSES AND ELEMENTS START ---
     $headerClasses = 'fixed top-0 left-0 right-0 z-50 p-4 transition-all duration-300';
     $headerContainerClasses = 'container mx-auto flex justify-between items-center';
     $mobileMenuClasses = 'hidden md:hidden mt-4 rounded-lg shadow-xl';
     $mobileMenuLinkClasses = 'block px-4 py-3 transition-colors duration-300';
     
-    // Logic for header style based on page
+    // UPDATED: More robust logic for page type detection
     $isBlogPage = strpos($_SERVER['REQUEST_URI'], '/blogs/') !== false;
+    $isAdminPage = in_array($currentPage, ['admin-login.php', 'admin-register.php']);
+
     if ($isAuthPage || in_array($currentPage, ['contact.php', 'faqs.php']) || $isBlogPage) {
         $headerClasses .= ' bg-white shadow-md';
         $headerContainerClasses .= ' text-gray-800';
@@ -25,12 +26,22 @@
     // Determine the base path for assets and includes
     $basePath = $isBlogPage ? '../' : './';
 
-    // Body class
-    $bodyClasses = '';
-    if ($isAuthPage) $bodyClasses .= 'register-page-body ';
-    if ($isBlogPage) $bodyClasses .= 'blog-page ';
+    // Logic for the background overlay
+    $overlayClass = '';
+    if ($currentPage == 'register.php') {
+        $overlayClass = 'register-page-overlay';
+    } elseif ($currentPage == 'admin-login.php') {
+        $overlayClass = 'admin-login-page-overlay';
+    } elseif ($currentPage == 'admin-register.php') {
+        $overlayClass = 'admin-register-page-overlay';
+    }
 
-    // --- DYNAMIC CLASSES END ---
+    // Body class logic
+    $bodyClasses = '';
+    if ($isBlogPage) {
+        $bodyClasses .= 'blog-page ';
+    }
+   // --- DYNAMIC CLASSES AND ELEMENTS END ---
 ?>
 
 <!DOCTYPE html>
@@ -47,8 +58,11 @@
 </head>
 
 <body data-page="<?php echo htmlspecialchars($currentPage); ?>" class="<?php echo trim($bodyClasses); ?>"> 
+    
+    <?php if (!empty($overlayClass)): ?>
+        <div class="page-background-overlay <?php echo $overlayClass; ?>"></div>
+    <?php endif; ?>
 
-    <!-- Page Loader -->
     <div id="page-loader">
         <div class="loader-dual-ring"></div>
     </div>
@@ -59,18 +73,17 @@
 
     <header id="main-header" class="<?php echo $headerClasses; ?>">
         <div class="<?php echo $headerContainerClasses; ?>">
-            <!-- MODIFIED: Added icon and site-logo class -->
             <a href="<?php echo $basePath; ?>home.php" class="text-2xl font-bold flex items-center site-logo">
                 <i class="fas fa-brain mr-2 text-2xl"></i>
                 <span>Smart Career AI</span>
             </a>
             
             <nav class="hidden md:flex items-center space-x-6 nav-links">
-                <a href="<?php echo $basePath; ?>home.php#home" class="nav-link <?php if($currentPage == 'home.php') echo 'active'; ?>">Home</a>
+                <a href="<?php echo $basePath; ?>home.php#home" class="nav-link">Home</a>
                 <a href="<?php echo $basePath; ?>home.php#features" class="nav-link">Features</a>
                 
                 <div class="relative" id="blog-dropdown-container">
-                    <button id="blog-dropdown-button" class="nav-link flex items-center">
+                    <button id="blog-dropdown-button" class="nav-link flex items-center <?php if ($isBlogPage) echo 'active'; ?>">
                         Blogs <i class="fas fa-chevron-down text-xs ml-1"></i>
                     </button>
                     <div id="blog-dropdown-menu" class="hidden absolute left-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 z-50 text-gray-800">
@@ -93,7 +106,7 @@
                 <a href="<?php echo $basePath; ?>register.php" class="bg-blue-500 px-4 py-2 rounded-md hover:bg-blue-600 transition cta-button <?php if($currentPage == 'register.php') echo 'active-btn'; ?>">Sign Up</a>
                 
                 <div class="relative" id="admin-dropdown-container">
-                    <button id="admin-dropdown-button" class="px-4 py-2 rounded-md border border-gray-500/50 hover:bg-gray-500/20 transition">
+                    <button id="admin-dropdown-button" class="px-4 py-2 rounded-md border border-gray-500/50 hover:bg-gray-500/20 transition <?php if ($isAdminPage) echo 'active-dropdown-btn'; ?>">
                         Admin <i class="fas fa-chevron-down text-xs ml-1"></i>
                     </button>
                     <div id="admin-dropdown-menu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 text-gray-800">
