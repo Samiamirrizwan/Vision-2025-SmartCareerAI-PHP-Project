@@ -20,10 +20,9 @@ unset($_SESSION['old_input']);
 include('includes/header.php');
 ?>
 
-<link rel="stylesheet" href="assets/css/style.css">
-<!-- General scripts are loaded first -->
+<!-- General scripts are loaded first 
 <script src="/assets/js/script.js"></script>
-<script src="/assets/js/main.js"></script>
+<script src="/assets/js/main.js"></script> -->
 
 <main class="register-page text-white">
     <div class="min-h-screen flex items-center justify-center p-4 pt-24 md:pt-24">
