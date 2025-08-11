@@ -35,7 +35,7 @@ XAMPP: Start Apache & MySQL
 Laravel: Set up Laravel routes if integrating
 
 Open index.php in your browser:
-http://localhost/SmartCareerAI/index.php
+http://localhost/SmartCareerAI/home.php
 
 📦 File Descriptions
 
