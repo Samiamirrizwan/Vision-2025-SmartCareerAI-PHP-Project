@@ -35,8 +35,8 @@
                        <li class="mb-2"><a href="<?php echo $footerBasePath; ?>contact.php" class="hover:text-white transition">Contact Us</a></li>
                     </ul>
                     <div class="flex space-x-4">
-                        <a href="#" class="text-2xl hover:text-blue-500 transition"><i class="fab fa-facebook"></i></a>
-                        <a href="#" class="text-2xl hover:text-blue-400 transition"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.facebook.com/working4happiness/" class="text-2xl hover:text-blue-500 transition"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-2xl hover:text-blue-400 transition"><i class="fa-brands fa-x-twitter"></i></a>
                         <a href="#" class="text-2xl hover:text-purple-500 transition"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
