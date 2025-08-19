@@ -44,7 +44,7 @@ require_once 'includes/header.php';
                     <label for="password" class="block mb-2 text-sm font-medium text-gray-300">Password</label>
                      <div class="relative">
                         <i class="fas fa-lock absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                        <input type="password" name="password" id="password" class="form-input pl-10 pr-10" placeholder="••••••••" required>
+                        <input type="password" name="password" id="password" class="form-input pl-10 pr-10" placeholder="Enter the password" required>
                         <i class="toggle-password fas fa-eye" data-target="#password"></i>
                     </div>
                 <div>

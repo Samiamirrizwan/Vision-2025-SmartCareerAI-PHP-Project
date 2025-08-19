@@ -26,20 +26,20 @@ require_once 'includes/header.php';
                     <label for="name" class="block mb-2 text-sm font-medium text-gray-300">Full Name</label>
                     <div class="relative">
                         <i class="fas fa-user absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                        <input type="text" name="name" id="name" class="form-input pl-10" required>
+                        <input type="text" name="name" id="name" class="form-input pl-10" placeholder="Enter your full name here" required>
                     </div>
                 </div>
                 <div>
                     <label for="email" class="block mb-2 text-sm font-medium text-gray-300">Email Address</label>
                     <div class="relative">
                         <i class="fas fa-envelope absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                        <input type="email" name="email" id="email" class="form-input pl-10" required>
+                        <input type="email" name="email" id="email" class="form-input pl-10" placeholder="Enter your email here" required>
                     </div>
                 </div>
                     <label for="password" class="block mb-2 text-sm font-medium text-gray-300">Password</label>
                     <div class="relative">
                         <i class="fas fa-lock absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                        <input type="password" name="password" id="password" class="form-input pl-10 pr-10" required>
+                        <input type="password" name="password" id="password" class="form-input pl-10 pr-10" placeholder="Enter the password" required>
                         <i class="toggle-password fas fa-eye" data-target="#password"></i>
                     </div>
                  <div>
