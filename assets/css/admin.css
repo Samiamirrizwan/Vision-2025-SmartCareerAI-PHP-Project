@@ -1,0 +1,236 @@
+/* ===================================================================
+   STYLE.CSS - Fixed & Enhanced
+   =================================================================== */
+
+/* 1. ROOT & VARIABLES */
+:root {
+    --color-primary: #3b82f6;
+    --color-primary-light: #60a5fa;
+    --color-primary-dark: #1d4ed8;
+    --color-dark-bg: #0A0A1A;
+    --color-dark-surface: #111827;
+    --color-light-text: #E5E7EB;
+    --color-medium-text: #9ca3af;
+    --color-dark-text: #1f2937;
+    --color-white: #ffffff;
+    --color-success: #16a34a;
+    --color-danger: #dc2626;
+    --color-border: rgba(255, 255, 255, 0.1);
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-blur: 12px;
+    --glass-border-color: rgba(255, 255, 255, 0.1);
+    --shadow-sm: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-md: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.2), 0 8px 10px -6px rgb(0 0 0 / 0.2);
+    --shadow-glow-primary: 0 0 15px rgba(59, 130, 246, 0.4);
+    --transition-fast: all 0.2s ease-in-out;
+    --transition-medium: all 0.4s ease-in-out;
+    --font-sans: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* 2. GLOBAL & BASE STYLES */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: var(--font-sans);
+    background-color: var(--color-dark-bg);
+    color: var(--color-light-text);
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body.admin-auth-page {
+    background-color: #0d1117;
+    background-image: radial-gradient(circle at 25px 25px, rgba(59, 130, 246, 0.2) 2%, transparent 0%),
+                      radial-gradient(circle at 75px 75px, rgba(59, 130, 246, 0.2) 2%, transparent 0%);
+    background-size: 100px 100px;
+}
+
+/* 3. PARTICLE BACKGROUND */
+#particle-container {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+}
+.particle {
+    position: absolute;
+    border-radius: 50%;
+    background-color: rgba(96, 165, 250, 0.4);
+    animation: float 25s infinite ease-in-out;
+}
+@keyframes float {
+    0%, 100% { transform: translateY(0) translateX(0); opacity: 0.1; }
+    50% { transform: translateY(-15vh) translateX(10vw); opacity: 0.5; }
+}
+
+/* 4. HEADER & NAVIGATION */
+#main-header.bg-white { color: var(--color-dark-text); }
+#main-header.bg-white .nav-links a { color: var(--color-dark-text); font-weight: 500; }
+
+.nav-link {
+    position: relative;
+    transition: color 0.3s ease;
+}
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--color-primary-light);
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.3s ease-out;
+}
+.nav-link:hover::after,
+.nav-link.active::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+.nav-link.active {
+    color: var(--color-primary-light);
+    font-weight: 600;
+}
+
+/* 5. BUTTONS */
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    border: none;
+}
+
+.btn-primary {
+    background-image: linear-gradient(to right, var(--color-primary), var(--color-primary-light));
+    background-size: 200% auto;
+    background-position: left center;
+    color: var(--color-white);
+    box-shadow: 0 4px 15px 0 rgba(59, 130, 246, 0.3);
+}
+.btn-primary:hover {
+    background-position: right center;
+    box-shadow: 0 6px 20px 0 rgba(96, 165, 250, 0.4);
+    transform: translateY(-2px);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--color-primary);
+    color: var(--color-primary);
+}
+.btn-outline:hover {
+    background-color: var(--color-primary-light);
+    color: var(--color-white);
+}
+
+/* 6. FORMS */
+.form-container {
+    background-color: rgba(17, 24, 39, 0.8);
+    backdrop-filter: blur(var(--glass-blur));
+    border-radius: 0.75rem;
+    transition: var(--transition-medium);
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--glass-border-color);
+}
+.form-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: linear-gradient(45deg, var(--color-primary-dark), var(--color-primary-light));
+    mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    animation: rotate 4s linear infinite;
+    pointer-events: none;
+}
+.form-container:hover::before {
+    opacity: 1;
+}
+@keyframes rotate {
+    100% { transform: rotate(360deg); }
+}
+
+.form-input {
+    font-size: 1rem;
+    font-weight: 500;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid transparent;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--color-light-text);
+    transition: var(--transition-fast);
+}
+.form-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
+}
+.password-container { position: relative; }
+.toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: var(--color-medium-text);
+    transition: color 0.2s ease;
+}
+.toggle-password:hover { color: var(--color-light-text); }
+
+/* 7. ALERTS */
+.alert {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+}
+.alert-success {
+    background-color: rgba(22, 163, 74, 0.3);
+    border: 1px solid var(--color-success);
+    color: #4ade80;
+}
+.alert-danger {
+    background-color: rgba(220, 38, 38, 0.3);
+    border: 1px solid var(--color-danger);
+    color: #f87171;
+}
+
+/* 8. UTILITIES */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 80px 1rem 1rem;
+}
+
+/* Accessibility: Focus visible */
+:focus-visible {
+    outline: 2px dashed var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}

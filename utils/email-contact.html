@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Contact Form Submission</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+        }
+        .header {
+            background-color: #1e3a8a;
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .content {
+            padding: 30px;
+            color: #333333;
+            line-height: 1.6;
+        }
+        .content h2 {
+            color: #1e3a8a;
+            font-size: 20px;
+            margin-top: 0;
+        }
+        .field-label {
+            font-weight: bold;
+            color: #555555;
+        }
+        .message-box {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .footer {
+            background-color: #343a40;
+            color: #cccccc;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+        }
+        .footer a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f4f7f6">
+        <tr>
+            <td align="center" style="padding: 20px 0;">
+                <div class="container">
+                    <!-- Header -->
+                    <div class="header">
+                        <h1>SmartCareerAI</h1>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="content">
+                        <h2>New Contact Form Submission</h2>
+                        <p><span class="field-label">From:</span> {{sender_name}}</p>
+                        <p><span class="field-label">Email:</span> <a href="mailto:{{sender_email}}" style="color: #3b82f6;">{{sender_email}}</a></p>
+                        <p><span class="field-label">Subject:</span> {{email_subject}}</p>
+                        <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 20px 0;">
+                        <p class="field-label">Message:</p>
+                        <div class="message-box">
+                            <p style="margin: 0;">{{email_message}}</p>
+                        </div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="footer">
+                        <p>This email was sent from the contact form on the SmartCareerAI website.</p>
+                        <p>&copy; {{current_year}} SmartCareerAI. All Rights Reserved.</p>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

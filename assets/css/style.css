@@ -1,0 +1,875 @@
+/* ===================================================================
+   STYLE.CSS - Refactored & Improved
+   ===================================================================
+   - Organized with a component-based structure.
+   - Uses CSS variables for easy theming.
+   - Removed redundant and conflicting styles.
+   - Enhanced animations, transitions, and user feedback.
+   - Improved accessibility and maintainability.
+   =================================================================== */
+
+/* ===================================================================
+   1. ROOT & VARIABLES
+   =================================================================== */
+:root {
+    /* Color Palette */
+    --color-primary: #3b82f6;          /* Blue 500 */
+    --color-primary-light: #60a5fa;     /* Blue 400 */
+    --color-primary-dark: #1d4ed8;      /* Blue 700 */
+    --color-dark-bg: #0A0A1A;           /* Main dark background */
+    --color-dark-surface: #111827;      /* Darker card/surface background (Gray 900) */
+    --color-light-text: #E5E7EB;        /* Light text (Gray 200) */
+    --color-medium-text: #9ca3af;       /* Muted text (Gray 400) */
+    --color-dark-text: #1f2937;         /* Dark text (Gray 800) */
+    --color-white: #ffffff;
+    --color-success: #16a34a;           /* Green 600 */
+    --color-danger: #dc2626;            /* Red 600 */
+    --color-border: rgba(255, 255, 255, 0.1);
+
+    /* Glass Effect */
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-blur: 12px;
+    --glass-border-color: rgba(255, 255, 255, 0.1);
+
+    /* Shadows */
+    --shadow-sm: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-md: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.2), 0 8px 10px -6px rgb(0 0 0 / 0.2);
+    --shadow-glow-primary: 0 0 15px rgba(59, 130, 246, 0.4);
+
+    /* Transitions */
+    --transition-fast: all 0.2s ease-in-out;
+    --transition-medium: all 0.4s ease-in-out;
+
+    /* Fonts */
+    --font-sans: 'Inter', sans-serif;
+}
+
+
+/* ===================================================================
+   2. GLOBAL & BASE STYLES
+   =================================================================== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    /* FIX: Prevent horizontal scroll */
+    overflow-x: hidden;
+}
+
+body {
+    font-family: var(--font-sans);
+    background-color: var(--color-dark-bg);
+    color: var(--color-light-text);
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    position: relative; /* For background overlay */
+    /* FIX: Prevent horizontal scroll */
+    overflow-x: hidden;
+}
+
+/* NEW: Custom Azure Blue Scrollbar */
+::-webkit-scrollbar {
+    width: 12px;
+    background-color: var(--color-dark-bg);
+}
+::-webkit-scrollbar-thumb {
+    background-color: var(--color-primary-dark);
+    border-radius: 10px;
+    border: 3px solid var(--color-dark-bg);
+}
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-primary);
+}
+
+
+/* IMPROVEMENT: Unique, animated backgrounds for each authentication page.
+  These classes will be added by a script on their respective pages.
+*/
+/* ===================================================================
+   NEW: Page Background Overlay System
+   =================================================================== */
+
+/* Base styles for the overlay container */
+.page-background-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1; /* Sits behind all page content */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    /* This animation creates the live moving effect */
+    animation: subtleZoom 40s alternate infinite ease-in-out;
+}
+
+/* Unique overlays for each page using a dark gradient for readability */
+/* For register.php -> background-1.jpeg */
+.register-page-overlay {
+    background-image: linear-gradient(rgba(10, 10, 26, 0), rgba(10, 10, 26, 0.7)), url('../../assets/img/background-1.jpeg');
+}
+
+/* For admin-login.php -> background-3.jpeg */
+.admin-login-page-overlay {
+    background-image: linear-gradient(rgba(10, 10, 26, 0.7), rgba(10, 10, 26, 0.7)), url('../../assets/img/background-3.jpeg');
+}
+
+/* For admin-register.php -> background-2.jpeg */
+.admin-register-page-overlay {
+    background-image: linear-gradient(rgba(10, 10, 26, 0.7), rgba(10, 10, 26, 0.7)), url('../../assets/img/background-2.jpeg');
+}
+
+/* Keyframe animation for the subtle zoom effect */
+@keyframes subtleZoom {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.1);
+    }
+}
+
+/* ===================================================================
+   3. INTERACTIVE PARTICLE BACKGROUND
+   =================================================================== */
+#particle-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Sit behind all content */
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.particle {
+    position: absolute;
+    border-radius: 50%;
+    background-color: rgba(96, 165, 250, 0.4);
+    animation: float 25s infinite ease-in-out;
+    transition: var(--transition-medium);
+    will-change: transform, opacity;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0) translateX(0);
+        opacity: 0.1;
+    }
+    50% {
+        transform: translateY(-15vh) translateX(10vw);
+        opacity: 0.5;
+    }
+    100% {
+        transform: translateY(0) translateX(0);
+        opacity: 0.1;
+    }
+}
+
+
+/* ===================================================================
+   4. HEADER & NAVIGATION
+   =================================================================== */
+#main-header.bg-white {
+    color: var(--color-dark-text);
+}
+
+#main-header.bg-white .nav-links a {
+    color: var(--color-dark-text);
+    font-weight: 500;
+}
+
+/* NEW: Site Logo Styling */
+.site-logo {
+    transition: var(--transition-fast);
+    color: inherit; /* Inherit color from parent */
+}
+.site-logo:hover {
+    color: var(--color-primary-light);
+    text-shadow: 0 0 12px rgba(96, 165, 250, 0.8);
+}
+#main-header.bg-white .site-logo:hover {
+    color: var(--color-primary);
+    text-shadow: 0 0 12px rgba(59, 130, 246, 0.6);
+}
+
+.nav-link {
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+/* Replace the existing .nav-link::after and .nav-link:hover::after rules with this enhanced version */
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    width: 100%;
+    height: 2px;
+    background-color: var(--color-primary-light);
+    transform: translateX(-50%) scaleX(0);
+    transform-origin: center;
+    /* This creates the fluid "motion trail" animation */
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    transform: translateX(-50%) scaleX(1);
+}
+
+.nav-link.active {
+    color: var(--color-primary-light) !important;
+    font-weight: 600;
+}
+
+/* NEW: Dropdown Menu Animation */
+.dropdown-menu {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+}
+.dropdown-menu.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* NEW: Active Dropdown Item Styling */
+.dropdown-item.active {
+    background-color: var(--color-primary);
+    color: var(--color-white) !important;
+    font-weight: 600;
+}
+.dropdown-item.active:hover {
+    background-color: var(--color-primary-dark);
+}
+
+/* ENHANCEMENT: Mobile Menu Animation & Accessibility */
+#mobile-menu {
+    opacity: 0;
+    transform: translateY(-10px);
+    max-height: 0;
+    overflow-y: auto;
+    visibility: hidden;
+    transition: opacity 0.4s ease, transform 0.4s ease, max-height 0.4s ease, visibility 0.4s;
+}
+
+#mobile-menu.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    /* Calculate max-height based on viewport minus header height */
+    max-height: calc(100vh - 80px); 
+}
+
+
+/* ENHANCEMENT: Mobile Menu Active & Hover States */
+#mobile-menu .mobile-nav-link.active {
+    background-color: var(--color-primary);
+    color: var(--color-white) !important;
+    font-weight: bold;
+}
+#main-header.bg-white #mobile-menu .mobile-nav-link.active {
+    background-color: var(--color-primary);
+    color: var(--color-white) !important;
+}
+
+/* NEW: De-emphasized Sign Up button style for mobile */
+.mobile-signup-btn {
+    background-color: transparent !important;
+    border: 2px solid var(--color-primary);
+    color: var(--color-primary-light) !important;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* ADDED: Active state for the mobile sign-up button */
+.mobile-signup-btn.active {
+    background-color: var(--color-primary) !important;
+    color: var(--color-white) !important;
+}
+
+.mobile-signup-btn:hover {
+    background-color: rgb(0, 32, 83) !important;
+}
+#main-header.bg-white .mobile-signup-btn {
+     border-color: var(--color-primary-dark);
+     color: var(--color-primary-dark) !important;
+}
+
+
+/* ===================================================================
+   5. BUTTONS
+   =================================================================== */
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    border: none;
+    position: relative; /* Needed for stacking context */
+    z-index: 2; /* Ensure buttons are on top */
+}
+
+.btn-primary {
+    background-image: linear-gradient(to right, var(--color-primary), var(--color-primary-light));
+    color: var(--color-white);
+    box-shadow: 0 4px 15px 0 rgba(59, 130, 246, 0.3);
+}
+
+.btn-primary:hover {
+    background-position: right center;
+    box-shadow: 0 6px 20px 0 rgba(96, 165, 250, 0.4);
+    transform: translateY(-2px);
+}
+
+/* Active state for nav buttons */
+.active-btn {
+    background-color: var(--color-primary-dark);
+    box-shadow: var(--shadow-glow-primary);
+    color: var(--color-white);
+}
+
+#main-header.bg-white .active-btn {
+    background-color: var(--color-primary-dark);
+    box-shadow: 0 4px 14px 0 rgba(29, 78, 216, 0.4);
+    color: var(--color-white);
+}
+
+/* Add this new class within section 5. BUTTONS */
+.active-dropdown-btn {
+    background-color: rgba(59, 130, 246, 0.2) !important;
+    border-color: var(--color-primary) !important;
+    color: var(--color-primary-light) !important;
+}
+
+
+/* ===================================================================
+   6. FORMS & INPUTS
+   =================================================================== */
+.form-container {
+    background-color: rgba(17, 24, 39, 0.6);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border-color);
+    transition: var(--transition-medium);
+    box-shadow: var(--shadow-md);
+}
+
+/* IMPROVEMENT: Enhanced hover effect for more fluidity */
+.form-container:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg), 0 0 25px rgba(96, 165, 250, 0.2);
+    border-color: rgba(96, 165, 250, 0.3);
+}
+
+.form-input {
+    font-size: 1rem;
+    font-weight: 500;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid transparent;
+    transition: var(--transition-fast);
+}
+
+/* Dark theme inputs (default for form-container) */
+.form-container .form-input {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--color-light-text);
+}
+
+/* Light theme inputs */
+.form-light .form-input {
+    background-color: var(--color-white);
+    color: var(--color-dark-text);
+    border: 1px solid #d1d5db; /* Gray 300 */
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
+}
+
+.password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: var(--color-medium-text);
+    z-index: 10;
+    transition: color 0.2s ease;
+}
+
+.toggle-password:hover {
+    color: var(--color-light-text);
+}
+
+
+/* ===================================================================
+   7. CARDS
+   =================================================================== */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border-color);
+    border-radius: 0.75rem;
+    transition: var(--transition-medium);
+    transform-style: preserve-3d;
+}
+
+/* ENHANCEMENT: 3D Container Effect */
+.glass-card:hover {
+    transform: translateY(-12px) scale(1.03) perspective(1000px) rotateX(2deg);
+    box-shadow: 0 25px 40px -10px rgb(0 0 0 / 0.3), 0 0 20px rgba(96, 165, 250, 0.3);
+}
+
+.course-card {
+    background-color: var(--color-dark-surface);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    transition: var(--transition-medium);
+    box-shadow: var(--shadow-md);
+    transform-style: preserve-3d;
+}
+
+/* ENHANCEMENT: 3D Container Effect */
+.course-card:hover {
+    transform: translateY(-10px) perspective(1000px) rotateY(-2deg);
+    box-shadow: 0 20px 30px -10px rgb(0 0 0 / 0.4);
+}
+
+.course-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+}
+
+.course-card-content {
+    padding: 1.5rem;
+}
+
+
+/* ===================================================================
+   8. HERO & BANNERS
+   =================================================================== */
+.hero-section, .banner-section, .section-banner {
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section {
+    background-image: url('../../assets/img/banner-2.jpeg');
+    animation: subtleZoom 40s alternate infinite ease-in-out;
+}
+
+.banner-section {
+    background-image: url('../../assets/img/banner-2.jpeg');
+}
+
+.section-banner {
+    background-image: url('../../assets/img/banner-1.jpeg');
+}
+
+/* Shared overlay for all banners */
+.hero-section::before, .banner-overlay {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1;
+}
+
+.hero-section > .container {
+    position: relative;
+    z-index: 2; /* Ensure content is above the overlay */
+}
+
+/* Keyframe animation for subtle zoom effect */
+@keyframes subtleZoom {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.1);
+    }
+}
+
+
+/* ===================================================================
+   9. ALERTS & NOTIFICATIONS
+   =================================================================== */
+.alert {
+    padding: 1rem 2.5rem 1rem 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+    color: var(--color-white);
+    font-weight: 500;
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+    position: relative;
+}
+
+.alert-success {
+    background-color: var(--color-success);
+}
+
+.alert-danger {
+    background-color: var(--color-danger);
+}
+
+.alert-fade-out {
+    opacity: 0;
+}
+
+.alert .close-btn {
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--color-white);
+    font-size: 1.25rem;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.alert .close-btn:hover {
+    opacity: 1;
+}
+
+
+/* ===================================================================
+   10. UTILITY & LAYOUT CLASSES
+   =================================================================== */
+.login-container, .register-page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 1rem;
+    padding-top: 80px; /* Adjust based on header height */
+}
+
+.left-panel {
+    background: linear-gradient(to right, #1e3a8a, #0c1a4d);
+}
+
+
+/* --- Password Strength Meter --- */
+.strength-bar {
+    width: 0%;
+    background-color: transparent;
+}
+.strength-bar.weak { width: 25%; background-color: #ef4444; /* red-500 */ }
+.strength-bar.medium { width: 50%; background-color: #f97316; /* orange-500 */ }
+.strength-bar.strong { width: 75%; background-color: #eab308; /* yellow-500 */ }
+.strength-bar.very-strong { width: 100%; background-color: #22c55e; /* green-500 */ }
+
+
+/* Button loader animation */
+.loader {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #FFF;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  vertical-align: middle;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+  margin-right: 8px;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===================================================================
+   11. NEW STYLES (Added as per request)
+   =================================================================== */
+
+/* --- Enhanced About Section --- */
+.about-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border-color);
+    padding: 2rem;
+    border-radius: 0.75rem;
+    transition: var(--transition-medium);
+}
+.about-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-glow-primary);
+    background: rgba(255, 255, 255, 0.1);
+}
+.about-icon {
+    font-size: 2.5rem;
+    color: var(--color-primary-light);
+    margin-bottom: 1.5rem;
+    display: inline-block;
+}
+
+/* --- Contact Page --- */
+.contact-hero {
+    background-image: linear-gradient(rgba(10, 10, 26, 0.7), rgba(10, 10, 26, 0.7)), url('../../assets/img/banner-1.jpeg');
+    background-size: cover;
+    background-position: center;
+}
+.contact-icon {
+    flex-shrink: 0;
+    width: 3rem;
+    height: 3rem;
+    background-color: rgba(59, 130, 246, 0.1);
+    color: var(--color-primary-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+}
+
+/* --- FAQ Page --- */
+.faq-item {
+    background-color: var(--color-dark-surface);
+    border-radius: 0.5rem;
+    border: 1px solid var(--glass-border-color);
+    overflow: hidden;
+    transition: var(--transition-fast);
+}
+.faq-item:hover {
+    border-color: var(--color-primary);
+}
+.faq-question {
+    width: 100%;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-light-text);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+/* NEW: Added transition for the icon rotation */
+.faq-question i {
+    transition: transform 0.4s ease-in-out;
+}
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out;
+}
+.faq-answer p {
+    padding: 0 1.5rem 1.5rem;
+    color: var(--color-medium-text);
+    line-height: 1.6;
+}
+
+/* --- Blog Page --- */
+.blog-header {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    /* IMPROVEMENT: Added subtle zoom animation for a "live" feel */
+    animation: subtleZoom 40s alternate infinite ease-in-out;
+}
+.blog-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.4));
+    z-index: 1;
+}
+/* IMPROVEMENT: Reactive headline effect */
+.blog-header h1 {
+    transition: text-shadow 0.3s ease;
+    text-shadow: 
+        0 0 5px rgba(255, 255, 255, 0.5),
+        0 0 10px rgba(255, 255, 255, 0.3);
+}
+.blog-header h1:hover {
+    text-shadow: 
+        0 0 10px rgba(96, 165, 250, 0.8),
+        0 0 20px rgba(96, 165, 250, 0.6),
+        0 0 35px rgba(96, 165, 250, 0.4);
+}
+.blog-content {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    position: relative; /* Ensure content is in a stacking context */
+    z-index: 2;
+}
+.blog-content h2 {
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin-top: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: #111827; /* Gray 900 */
+}
+.blog-content p {
+    margin-bottom: 1.25rem;
+}
+.blog-content ul {
+    list-style-type: disc;
+    padding-left: 2rem;
+    margin-bottom: 1.25rem;
+}
+.blog-content li {
+    margin-bottom: 0.75rem;
+}
+.blog-content .lead {
+    font-size: 1.25rem;
+    color: #4b5563; /* Gray 600 */
+    margin-bottom: 2rem;
+}
+.blog-content figure {
+    margin: 2.5rem 0;
+}
+.blog-content figcaption {
+    font-size: 0.9rem;
+    text-align: center;
+    color: #6b7280; /* Gray 500 */
+    margin-top: 0.75rem;
+}
+
+/* ===================================================================
+   12. UX ENHANCEMENTS & BLOG STYLES (NEW)
+   =================================================================== */
+
+/* --- Page Loader --- */
+#page-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-dark-bg);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease;
+    /* Ensure it's not clickable */
+    pointer-events: none;
+}
+#page-loader.fade-out {
+    opacity: 0;
+}
+.loader-dual-ring {
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+}
+.loader-dual-ring:after {
+    content: " ";
+    display: block;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border-radius: 50%;
+    border: 6px solid var(--color-primary-light);
+    border-color: var(--color-primary-light) transparent var(--color-primary-light) transparent;
+    animation: loader-dual-ring 1.2s linear infinite;
+}
+@keyframes loader-dual-ring {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* --- Mouse Glow Effect --- */
+#mouse-glow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0) 60%);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 999;
+    transition: background 0.3s ease, transform 0.05s ease-out; /* Smoother follow */
+}
+/* MODIFIED: Show glow on blog pages AND on hover over site-logo */
+body.blog-page #mouse-glow {
+    display: block;
+}
+body:not(.blog-page) #mouse-glow {
+    display: none;
+}
+
+
+/* --- Blog Post Tilt Card --- */
+.blog-tilt-wrapper {
+    background-color: white;
+    border-radius: 0.75rem;
+    box-shadow: var(--shadow-lg);
+    transform-style: preserve-3d; /* Required for tilt effect */
+    will-change: transform;
+    /* IMPROVEMENT: Transition is smoother and handled by JS, but this is a good fallback */
+    transition: box-shadow 0.4s ease, transform 0.4s ease;
+}
+.blog-tilt-wrapper:hover {
+     box-shadow: 0 30px 40px -10px rgb(0 0 0 / 0.3);
+}
+/* FIXED: This makes the glare effect unclickable, allowing clicks to pass through */
+.blog-tilt-wrapper .js-tilt-glare {
+    pointer-events: none;
+}
+
+
+/* --- Scroll Reveal Animations --- */
+.reveal {
+    opacity: 0;
+    transform: translateY(40px) scale(0.98);
+    transition: opacity 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* NEW: Staggered animation delays */
+.reveal.delay-100 { transition-delay: 100ms; }
+.reveal.delay-200 { transition-delay: 200ms; }
+.reveal.delay-300 { transition-delay: 300ms; }
+.reveal.delay-400 { transition-delay: 400ms; }

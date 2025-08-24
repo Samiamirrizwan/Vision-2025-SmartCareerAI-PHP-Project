@@ -1,0 +1,289 @@
+/* assets/css/roadmap-style.css */
+
+/* --- MODIFICATION: Layer the 3D canvas and main content correctly --- */
+main {
+    /* Create a stacking context to ensure content is above the 3D canvas */
+    position: relative;
+    z-index: 2;
+}
+
+/* --- 3D Background Container --- */
+#roadmap-3d-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Set z-index to sit above the body background but below the content */
+    z-index: 1; 
+    overflow: hidden;
+}
+
+/* --- Main Roadmap Content --- */
+.roadmap-content {
+    position: relative;
+    z-index: 1;
+    padding: 1rem; /* Add some padding to not touch the edges */
+}
+
+.roadmap-timeline {
+    position: relative;
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem 0;
+}
+
+/* --- The Vertical Timeline Line --- */
+.roadmap-timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--primary-color), transparent);
+    border-radius: 3px;
+}
+
+/* --- Timeline Item Container --- */
+.roadmap-item {
+    padding: 10px 40px;
+    position: relative;
+    width: 50%;
+    opacity: 0;
+    animation: slideInFromSide 0.6s ease-out forwards;
+}
+
+/* Position items on the left and right */
+.roadmap-item:nth-child(odd) {
+    left: 0;
+}
+
+.roadmap-item:nth-child(even) {
+    left: 50%;
+}
+
+/* --- Timeline Item Content Card --- */
+.roadmap-item-content {
+    padding: 1.75rem;
+    background: var(--card-background);
+    border: 1px solid var(--border-color);
+    position: relative;
+    border-radius: 12px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.roadmap-item-content:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3), 0 0 20px var(--shadow-color);
+}
+
+/* --- Timeline Item Icon --- */
+.roadmap-icon {
+    position: absolute;
+    top: 20px;
+    z-index: 10;
+    width: 50px;
+    height: 50px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+    border: 3px solid var(--background-dark);
+    box-shadow: 0 0 0 4px var(--primary-color);
+}
+
+.roadmap-item:nth-child(odd) .roadmap-icon {
+    right: -25px;
+}
+
+.roadmap-item:nth-child(even) .roadmap-icon {
+    left: -25px;
+}
+
+/* --- Content Typography --- */
+.roadmap-step-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 0.75rem;
+}
+
+.roadmap-step-desc {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+/* --- Details Grid (Skills & Resources) --- */
+.roadmap-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.roadmap-details h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.roadmap-details ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.roadmap-details li {
+    padding: 0.25rem 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* --- Milestone Section --- */
+.roadmap-milestone {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--background-dark);
+    border-radius: 8px;
+    border-left: 4px solid var(--green);
+}
+
+.roadmap-milestone h4 {
+    color: var(--green);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.roadmap-milestone p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+/* --- Actions & No-Roadmap Card --- */
+.roadmap-actions {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.no-roadmap-card {
+    background: var(--card-background);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 3rem;
+    text-align: center;
+    max-width: 700px;
+    margin: 5rem auto;
+}
+
+/* --- Responsive Design --- */
+@media screen and (max-width: 900px) {
+    .roadmap-timeline::before {
+        left: 30px;
+    }
+
+    .roadmap-item {
+        width: 100%;
+        padding-left: 70px;
+        padding-right: 20px;
+    }
+
+    .roadmap-item:nth-child(even) {
+        left: 0;
+    }
+
+    .roadmap-icon {
+        left: 5px;
+    }
+    
+    .roadmap-details {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* --- Animation --- */
+@keyframes slideInFromSide {
+    0% {
+        transform: translateX(-100px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.roadmap-item:nth-child(even) {
+    animation-name: slideInFromSideEven;
+}
+
+@keyframes slideInFromSideEven {
+     0% {
+        transform: translateX(100px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .roadmap-item, .roadmap-item:nth-child(even) {
+        animation-name: slideInFromSide;
+    }
+}
+
+/* assets/css/roadmap-style.css */
+
+/* --- Page-Specific Body Styling --- */
+/* This ensures the body has a solid background color that shows through the transparent 3D canvas */
+body.roadmap-page {
+    background-color: var(--color-dark-bg);
+}
+
+/* --- Layer the 3D canvas and main content correctly --- */
+main {
+    /* Ensure the main content area is transparent to see the 3D canvas behind it */
+    background-color: transparent;
+    position: relative;
+    z-index: 2; /* Sits on top of the 3D canvas */
+}
+
+/* --- 3D Background Container --- */
+#roadmap-3d-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1; /* Sits below the main content */
+    overflow: hidden;
+}
+
+/* --- Main Roadmap Content Wrapper --- */
+.roadmap-content {
+    padding: 1rem;
+}
+
+/* ... The rest of your roadmap-style.css rules remain the same ... */
+
+.roadmap-timeline {
+    position: relative;
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem 0;
+}

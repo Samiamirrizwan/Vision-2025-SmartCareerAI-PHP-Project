@@ -1,0 +1,26 @@
+/* /assets/css/faqs.css */
+.faqs-page-main {
+    padding-top: 80px; /* Adjust for fixed header */
+    background-color: #f9fafb; /* gray-50 */
+}
+
+.faq-item .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out;
+}
+
+.faq-item.open .faq-answer {
+    /* max-height is set by JS to the element's scrollHeight */
+    border-top: 1px solid #e5e7eb; /* gray-200 */
+}
+
+/* The padding is now on the <p> tag inside, so we don't need to transition it */
+
+.faq-question i {
+    transition: transform 0.3s ease-in-out;
+}
+
+.faq-item.open .faq-question i {
+    transform: rotate(180deg);
+}
