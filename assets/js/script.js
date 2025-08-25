@@ -32,8 +32,12 @@ document.addEventListener('DOMContentLoaded', () => {
             // UX Enhancement Elements
             pageLoader: document.getElementById('page-loader'),
             mouseGlow: document.getElementById('mouse-glow'),
-            tiltElements: document.querySelectorAll('.blog-tilt-wrapper'),
-            revealElements: document.querySelectorAll('.reveal'), // This will now be used globally
+            // UPDATED: Selector now includes home page cards and blog wrappers
+            tiltElements: document.querySelectorAll('.blog-tilt-wrapper, .interactive-tilt'),
+            revealElements: document.querySelectorAll('.reveal'),
+            // ADDED: Elements for "How It Works" section enhancements
+            matrixCanvas: document.getElementById('matrix-canvas'),
+            stepItems: document.querySelectorAll('.step-item'),
         },
         state: {
             currentPage: document.body.dataset.page || 'unknown',
@@ -46,6 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
         config: {
             scrollThreshold: 50,
             particleCount: 80,
+            // ADDED: Config for magnetic effect
+            magneticForce: 0.25, // How strongly the element is pulled to the cursor
+            magneticDistance: 80, // The radius (in px) where the effect starts
         },
 
         utils: {
@@ -73,13 +80,17 @@ document.addEventListener('DOMContentLoaded', () => {
             this.initScrollToTop();
             this.initDropdown(this.elements.adminDropdownButton, this.elements.adminDropdownMenu, 'isAdminDropdownOpen');
             this.initDropdown(this.elements.blogDropdownButton, this.elements.blogDropdownMenu, 'isBlogDropdownOpen');
-            this.initScrollAnimations(); // <-- Initialize scroll animations on ALL pages
-            
+            this.initScrollAnimations();
+            this.initTiltEffect(); // MOVED: Initialize tilt effect globally, function will check for elements
+
             if (this.state.currentPage === 'home.php') {
                 this.initHeaderScrollBehavior();
                 this.initNavScrollObserver();
                 this.initSmoothScroll();
                 if (this.elements.particleContainer) this.initParticleEffect();
+                // ADDED: Initialize "How It Works" enhancements
+                if (this.elements.matrixCanvas) this.initMatrixEffect();
+                if (this.elements.stepItems.length > 0) this.initMagneticSteps();
             }
 
             if (this.state.currentPage === 'faqs.php') {
@@ -90,12 +101,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.initContactForm();
             }
 
-            // Run blog-specific enhancements
-            if (this.state.isBlogPage || document.querySelector('.site-logo')) {
+            // FIXED: Refined logic for clarity. Glow now runs only on specified pages.
+            if (this.state.currentPage === 'home.php' || this.state.isBlogPage) {
                 this.initMouseGlow();
-            }
-            if (this.state.isBlogPage) {
-                this.initTiltEffect();
             }
 
             window.addEventListener('resize', this.utils.throttle(() => {
@@ -122,20 +130,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             });
         },
-
+        
+        // ENHANCED: Tilt effect now applies to home page cards with more interactive settings
         initTiltEffect() {
             if (this.elements.tiltElements.length > 0 && typeof VanillaTilt !== 'undefined') {
                 VanillaTilt.init(this.elements.tiltElements, {
-                    max: 5,
-                    speed: 400,
-                    glare: true,
-                    "max-glare": 0.1,
-                    "transform-style": "preserve-3d"
+                    max: 8,           // Max tilt rotation (degrees)
+                    speed: 600,         // Speed of the enter/exit transition
+                    scale: 1.05,        // 1.05 = 5% grow effect on hover
+                    perspective: 1500,  // Transform perspective, the lower the more extreme the tilt
+                    glare: true,        // Add a glare effect
+                    "max-glare": 0.25,  // How much glare to show (0 to 1)
                 });
             }
         },
         
-        // ENHANCEMENT: This now runs on all pages for a consistent feel
         initScrollAnimations() {
             if (this.elements.revealElements.length === 0) return;
             const observer = new IntersectionObserver((entries, observer) => {
@@ -170,7 +179,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         },
 
-        // REFINED: Mobile menu now toggles an 'open' class for CSS animations
         initMobileMenu() {
             const { mobileMenuButton, mobileMenu } = this.elements;
             if (!mobileMenuButton || !mobileMenu) return;
@@ -371,6 +379,79 @@ document.addEventListener('DOMContentLoaded', () => {
                 fragment.appendChild(particle);
             }
             particleContainer.appendChild(fragment);
+        },
+
+        // ===================================================================
+        // ADDED: "HOW IT WORKS" SECTION ENHANCEMENTS
+        // ===================================================================
+        
+        initMatrixEffect() {
+            const canvas = this.elements.matrixCanvas;
+            const ctx = canvas.getContext('2d');
+            
+            let animationFrameId;
+
+            const setup = () => {
+                if (animationFrameId) cancelAnimationFrame(animationFrameId);
+                
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+        
+                const characters = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン01';
+                const charArray = characters.split('');
+                const fontSize = 14;
+                const columns = Math.floor(canvas.width / fontSize);
+                const drops = Array(columns).fill(1);
+        
+                const draw = () => {
+                    ctx.fillStyle = 'rgba(10, 10, 26, 0.05)';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    
+                    ctx.fillStyle = 'rgba(59, 130, 246, 0.7)';
+                    ctx.font = `${fontSize}px monospace`;
+        
+                    for (let i = 0; i < drops.length; i++) {
+                        const text = charArray[Math.floor(Math.random() * charArray.length)];
+                        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        
+                        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                            drops[i] = 0;
+                        }
+                        drops[i]++;
+                    }
+                    animationFrameId = requestAnimationFrame(draw);
+                };
+                draw();
+            }
+
+            setup();
+            window.addEventListener('resize', this.utils.throttle(setup, 250));
+        },
+
+        initMagneticSteps() {
+            this.elements.stepItems.forEach(item => {
+                const circle = item.querySelector('.step-circle');
+                if (!circle) return;
+
+                item.addEventListener('mousemove', (e) => {
+                    const rect = item.getBoundingClientRect();
+                    const mouseX = e.clientX - rect.left - rect.width / 2;
+                    const mouseY = e.clientY - rect.top - rect.height / 2;
+
+                    const moveX = mouseX * this.config.magneticForce;
+                    const moveY = mouseY * this.config.magneticForce;
+                    
+                    window.requestAnimationFrame(() => {
+                        circle.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                    });
+                });
+
+                item.addEventListener('mouseleave', () => {
+                    window.requestAnimationFrame(() => {
+                        circle.style.transform = 'translate(0, 0)';
+                    });
+                });
+            });
         }
     };
 

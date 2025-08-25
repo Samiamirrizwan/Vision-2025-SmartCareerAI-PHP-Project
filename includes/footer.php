@@ -4,6 +4,10 @@
 ?>
     <div id="mouse-glow"></div>
 
+    
+
+    
+
     <footer class="bg-gray-900 text-gray-400 py-12 relative z-10">
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">

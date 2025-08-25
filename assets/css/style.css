@@ -35,7 +35,7 @@
     --shadow-sm: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     --shadow-md: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1);
     --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.2), 0 8px 10px -6px rgb(0 0 0 / 0.2);
-    --shadow-glow-primary: 0 0 15px rgba(59, 130, 246, 0.4);
+    --shadow-glow-primary: 0 0 20px rgba(59, 130, 246, 0.5);
 
     /* Transitions */
     --transition-fast: all 0.2s ease-in-out;
@@ -440,9 +440,9 @@ body {
     transform-style: preserve-3d;
 }
 
-/* ENHANCEMENT: 3D Container Effect */
+/* ENHANCEMENT: 3D Container Effect - transform is now handled by JS (VanillaTilt) */
 .glass-card:hover {
-    transform: translateY(-12px) scale(1.03) perspective(1000px) rotateX(2deg);
+    /* transform: translateY(-12px) scale(1.03) perspective(1000px) rotateX(2deg); */ /* REMOVED to prevent conflict with JS */
     box-shadow: 0 25px 40px -10px rgb(0 0 0 / 0.3), 0 0 20px rgba(96, 165, 250, 0.3);
 }
 
@@ -455,10 +455,10 @@ body {
     transform-style: preserve-3d;
 }
 
-/* ENHANCEMENT: 3D Container Effect */
+/* ENHANCEMENT: 3D Container Effect - transform is now handled by JS (VanillaTilt) */
 .course-card:hover {
-    transform: translateY(-10px) perspective(1000px) rotateY(-2deg);
-    box-shadow: 0 20px 30px -10px rgb(0 0 0 / 0.4);
+    /* transform: translateY(-10px) perspective(1000px) rotateY(-2deg); */ /* REMOVED to prevent conflict with JS */
+    box-shadow: 0 20px 30px -10px rgb(0 0 0 / 0.4), var(--shadow-glow-primary);
 }
 
 .course-card img {
@@ -632,9 +632,10 @@ body {
     padding: 2rem;
     border-radius: 0.75rem;
     transition: var(--transition-medium);
+    transform-style: preserve-3d; /* ADDED for tilt effect */
 }
 .about-card:hover {
-    transform: translateY(-10px);
+    /* transform: translateY(-10px); */ /* REMOVED to prevent conflict with JS */
     box-shadow: var(--shadow-glow-primary);
     background: rgba(255, 255, 255, 0.1);
 }
@@ -772,6 +773,31 @@ body {
 }
 
 /* ===================================================================
+   NEW: "HOW IT WORKS" SECTION ENHANCEMENTS
+   =================================================================== */
+#matrix-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    opacity: 0.15; /* Kept subtle to not distract from content */
+    pointer-events: none; /* Ensure it's not interactive */
+}
+
+.step-item {
+    /* Creates the area for the magnetic effect. Padding can be used to increase this area if needed. */
+    cursor: pointer;
+}
+
+.step-circle {
+    /* This transition creates the smooth, springy return effect when the mouse leaves */
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    will-change: transform; /* Performance optimization */
+}
+
+/* ===================================================================
    12. UX ENHANCEMENTS & BLOG STYLES (NEW)
    =================================================================== */
 
@@ -815,26 +841,25 @@ body {
     100% { transform: rotate(360deg); }
 }
 
-/* --- Mouse Glow Effect --- */
+/* --- Mouse Glow Effect (ENHANCED) --- */
 #mouse-glow {
     position: fixed;
     top: 0;
     left: 0;
-    width: 600px;
-    height: 600px;
+    width: 800px; /* Increased size */
+    height: 800px; /* Increased size */
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0) 60%);
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0) 50%); /* More visible gradient */
     transform: translate(-50%, -50%);
     pointer-events: none;
     z-index: 999;
-    transition: background 0.3s ease, transform 0.05s ease-out; /* Smoother follow */
+    transition: transform 0.1s ease-out; /* Smoother follow */
+    display: none; /* Hidden by default */
 }
-/* MODIFIED: Show glow on blog pages AND on hover over site-logo */
+/* MODIFIED: Show glow on home and blog pages */
+body.home-page #mouse-glow,
 body.blog-page #mouse-glow {
     display: block;
-}
-body:not(.blog-page) #mouse-glow {
-    display: none;
 }
 
 
@@ -845,8 +870,7 @@ body:not(.blog-page) #mouse-glow {
     box-shadow: var(--shadow-lg);
     transform-style: preserve-3d; /* Required for tilt effect */
     will-change: transform;
-    /* IMPROVEMENT: Transition is smoother and handled by JS, but this is a good fallback */
-    transition: box-shadow 0.4s ease, transform 0.4s ease;
+    transition: box-shadow 0.4s ease;
 }
 .blog-tilt-wrapper:hover {
      box-shadow: 0 30px 40px -10px rgb(0 0 0 / 0.3);
