@@ -69,8 +69,8 @@ project/
    * Laravel (if integrating) → Configure routes accordingly
 3. Import database:
 
-   * Open **phpMyAdmin** → Create new DB → Import `/sqldb/smartcareerai.sql`
-4. Run the app in browser:
+   * Open **phpMyAdmin** → Create new DB → Import `/sqldb/smartcareerai.sql` `/sqldb/password-reset.sql` `/sqldb/admin-invite-codes.sql` `/sqldb/sample-data.sql`
+4. Run the app in the browser:
 
    ```
    http://localhost/SmartCareerAI/home.php
