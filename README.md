@@ -15,11 +15,11 @@ project/
 ├── /includes                ← Common backend includes
 │   ├── header.php           ← Website header section
 │   ├── footer.php           ← Website footer section
-│   └── db.php               ← Database connection file
+└── └── db.php               ← Database connection file
 ├── /assets                  ← Frontend styling and assets
 │   └── style.css            ← Base stylesheet (In css folder)
 │   └── scripts.js           ← Javascript Scripts (In js folder)
-│   └── img                  ← Resources of images (In img folder)
+└── └── img                  ← Resources of images (In img folder)
 ├── /user                    ← User dashboard (career tests, reports, resume builder, interview-kit, job-recommendations)
     ├── /includes                ← Common backend includes
     │   ├── header.php           ← Website header section
@@ -28,7 +28,7 @@ project/
     ├── /assets                  ← Frontend styling and assets
     │   └── styles.css           ← Base stylesheet (In css folder)
     │   └── scripts.js           ← Javascript Scripts (In js folder)
-    │   └── img                  ← Resources of images (In img folder)
+    └── └── img                  ← Resources of images (In img folder)
 ├── /admin                   ← Admin dashboard (management)
     ├── /includes                ← Common backend includes
     │   ├── header.php           ← Website header section
@@ -37,7 +37,7 @@ project/
     ├── /assets                  ← Frontend styling and assets
     │   └── styles.css           ← Base stylesheet (In css folder)
     │   └── scripts.js           ← Javascript Scripts (In js folder)
-    │   └── img                  ← Resources of images (In img folder)
+    └── └── img                  ← Resources of images (In img folder)
 ├── /api                     ← API endpoints (AI logic, suggestions)
 ├── /blogs                   ← Career blogs & articles
 ├── /reports                 ← Career reports and exports
