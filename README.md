@@ -8,7 +8,7 @@ SmartCareerAI is an **AI-powered platform** that helps students discover ideal c
 
 ```
 project/
-├── home.php                ← Homepage
+├── home.php                 ← Homepage
 ├── login.php                ← User login page
 ├── register.php             ← User registration page
 ├── forgot-password.php      ← Forgot password page
