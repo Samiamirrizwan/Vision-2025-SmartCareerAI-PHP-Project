@@ -82,7 +82,7 @@ project/
 
 | File/Folder       | Purpose                             |
 | ----------------- | ----------------------------------- |
-| index.php         | Home page with banner and intro CTA |
+| home.php          | Home page with banner and intro CTA |
 | login.php         | Form for existing users to sign in  |
 | register.php      | New user signup form                |
 | /includes/        | Shared layout + logic files         |
