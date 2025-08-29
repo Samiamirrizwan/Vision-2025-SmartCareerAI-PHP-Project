@@ -8,17 +8,36 @@ SmartCareerAI is an **AI-powered platform** that helps students discover ideal c
 
 ```
 project/
-├── index.php                ← Homepage
+├── home.php                ← Homepage
 ├── login.php                ← User login page
 ├── register.php             ← User registration page
+├── forgot-password.php      ← Forgot password page
 ├── /includes                ← Common backend includes
 │   ├── header.php           ← Website header section
 │   ├── footer.php           ← Website footer section
 │   └── db.php               ← Database connection file
 ├── /assets                  ← Frontend styling and assets
-│   └── style.css            ← Base stylesheet
-├── /user                    ← User dashboard (career tests, reports)
+│   └── style.css            ← Base stylesheet (In css folder)
+│   └── scripts.js           ← Javascript Scripts (In js folder)
+│   └── img                  ← Resources of images (In img folder)
+├── /user                    ← User dashboard (career tests, reports, resume builder, interview-kit, job-recommendations)
+    ├── /includes                ← Common backend includes
+    │   ├── header.php           ← Website header section
+    │   ├── footer.php           ← Website footer section
+    │   └── db.php               ← Database connection file
+    ├── /assets                  ← Frontend styling and assets
+    │   └── styles.css           ← Base stylesheet (In css folder)
+    │   └── scripts.js           ← Javascript Scripts (In js folder)
+    │   └── img                  ← Resources of images (In img folder)
 ├── /admin                   ← Admin dashboard (management)
+    ├── /includes                ← Common backend includes
+    │   ├── header.php           ← Website header section
+    │   ├── footer.php           ← Website footer section
+    │   └── db.php               ← Database connection file
+    ├── /assets                  ← Frontend styling and assets
+    │   └── styles.css           ← Base stylesheet (In css folder)
+    │   └── scripts.js           ← Javascript Scripts (In js folder)
+    │   └── img                  ← Resources of images (In img folder)
 ├── /api                     ← API endpoints (AI logic, suggestions)
 ├── /blogs                   ← Career blogs & articles
 ├── /reports                 ← Career reports and exports
