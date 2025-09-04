@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h4>Required Skills</h4>
                     <div class="job-tags">${tags}</div>
                     <div class="modal-actions">
-                        <a href="#" class="apply-btn">Apply Now</a>
+                        <a href="https://www.indeed.com/q-international-online-jobs.html" class="apply-btn">Apply Now</a>
                     </div>
                 `;
                 modal.style.display = 'block';
