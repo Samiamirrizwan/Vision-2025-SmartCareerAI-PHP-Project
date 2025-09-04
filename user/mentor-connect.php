@@ -15,7 +15,7 @@ $mentors = [
         'bio' => 'PhD in Computer Science with 15+ years of experience in machine learning and big data analytics. Passionate about mentoring the next generation of data innovators.',
         'image' => 'https://images.pexels.com/photos/3763188/pexels-photo-3763188.jpeg?auto=compress&cs=tinysrgb&w=600',
         'expertise' => ['Machine Learning', 'Python', 'Big Data', 'AI Ethics'],
-        'social' => ['linkedin' => '#', 'twitter' => '#']
+        'social' => ['linkedin' => 'https://www.linkedin.com/products/kettera-inc-mentor-connect/', 'twitter' => 'https://twitter.com/mentorrutland']
     ],
     [
         'id' => 'markus_chen',
@@ -24,7 +24,7 @@ $mentors = [
         'bio' => 'Lead Backend Engineer specializing in scalable systems and cloud architecture. Loves tackling complex problems and building robust, high-performance applications.',
         'image' => 'https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg?auto=compress&cs=tinysrgb&w=600',
         'expertise' => ['Cloud Architecture', 'Go', 'Microservices', 'DevOps'],
-        'social' => ['linkedin' => '#', 'github' => '#']
+        'social' => ['linkedin' => 'https://www.linkedin.com/products/kettera-inc-mentor-connect/', 'github' => 'https://github.blog/news-insights/apply-now-for-github-universe-2023-micro-mentoring/']
     ],
     [
         'id' => 'aisha_khan',
@@ -33,7 +33,7 @@ $mentors = [
         'bio' => 'A creative problem-solver dedicated to crafting intuitive and beautiful user experiences. Specializes in user-centered design and interactive prototyping.',
         'image' => 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=600',
         'expertise' => ['UI/UX Design', 'Figma', 'User Research', 'Prototyping'],
-        'social' => ['linkedin' => '#', 'dribbble' => '#']
+        'social' => ['linkedin' => 'https://www.linkedin.com/products/kettera-inc-mentor-connect/', 'dribbble' => 'https://dribbble.com/tags/connect-with-mentor']
     ],
     [
         'id' => 'david_rodriguez',
@@ -42,7 +42,7 @@ $mentors = [
         'bio' => 'Certified ethical hacker with a deep understanding of network security and threat analysis. Committed to making the digital world a safer place.',
         'image' => 'https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=600',
         'expertise' => ['Network Security', 'Penetration Testing', 'Threat Analysis', 'Cryptography'],
-        'social' => ['linkedin' => '#', 'twitter' => '#']
+        'social' => ['linkedin' => 'https://www.linkedin.com/products/kettera-inc-mentor-connect/', 'twitter' => 'https://twitter.com/mentorrutland']
     ],
     [
         'id' => 'chloe_kim',
@@ -51,7 +51,7 @@ $mentors = [
         'bio' => 'Strategic product leader with a track record of launching successful SaaS products. Excels at the intersection of technology, business, and user experience.',
         'image' => 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=600',
         'expertise' => ['Product Strategy', 'Agile Methodologies', 'Roadmap Planning', 'Market Research'],
-        'social' => ['linkedin' => '#', 'medium' => '#']
+        'social' => ['linkedin' => 'https://www.linkedin.com/products/kettera-inc-mentor-connect/', 'medium' => 'https://armano.medium.com/the-mentor-mentee-value-exchange-ed4772a452d0']
     ],
     [
         'id' => 'samuel_jones',
@@ -60,7 +60,7 @@ $mentors = [
         'bio' => 'Infrastructure expert focused on automation, reliability, and scaling. Believes in the "you build it, you run it" philosophy and building resilient systems.',
         'image' => 'https://images.pexels.com/photos/837358/pexels-photo-837358.jpeg?auto=compress&cs=tinysrgb&w=600',
         'expertise' => ['Kubernetes', 'Terraform', 'CI/CD', 'Observability', 'AWS'],
-        'social' => ['linkedin' => '#', 'github' => '#']
+        'social' => ['linkedin' => 'https://www.linkedin.com/products/kettera-inc-mentor-connect/', 'github' => 'https://github.blog/news-insights/apply-now-for-github-universe-2023-micro-mentoring/']
     ]
 ];
 ?>
@@ -90,7 +90,7 @@ $mentors = [
                         </div>
                         <p class="mentor-bio"><?php echo htmlspecialchars($mentor['bio']); ?></p>
                         <div class="mentor-footer">
-                            <a href="start-connection.php?mentor_id=<?php echo htmlspecialchars($mentor['id']); ?>" class="mentor-connect-btn">
+                            <a href="https://mentorconnect.ca/" class="mentor-connect-btn">
                                 <i class="fas fa-user-plus"></i> Connect
                             </a>
                             <div class="mentor-socials">

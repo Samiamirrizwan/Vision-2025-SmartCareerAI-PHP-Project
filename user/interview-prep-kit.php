@@ -32,7 +32,7 @@ $prep_topics = [
                 <h3 class="card-title"><?php echo htmlspecialchars($topic['title']); ?></h3>
             </div>
             <p class="card-description"><?php echo htmlspecialchars($topic['description']); ?></p>
-            <a href="#" class="card-link blue">Start Learning &rarr;</a>
+            <a href="https://www.interviewbit.com/interview-preparation-kit/" class="card-link blue">Start Learning &rarr;</a>
         </div>
         <?php endforeach; ?>
     </div>
