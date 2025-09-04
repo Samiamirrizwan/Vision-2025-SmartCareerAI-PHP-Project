@@ -90,6 +90,8 @@ project/
 | footer.php        | Site footer                         |
 | db.php            | Database connection handler         |
 | /assets/style.css | Main styling for layout and buttons |
+| /assets/script.js | Main scripting for layout and buttons |
+| /assets/img       | Main resources of website media files and images |
 | /blogs            | Career-related blogs and content    |
 | /reports          | Generated career reports            |
 
