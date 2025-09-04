@@ -6,10 +6,10 @@
                     Empowering professionals to navigate their career paths with confidence. We leverage AI to provide personalized guidance, job recommendations, and skill analysis.
                 </p>
                 <div class="social-icons">
-                    <a href="#" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                    <a href="#" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
-                    <a href="#" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://twitter.com/SmartCareerAi/status/1743096488300106013" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="https://in.linkedin.com/company/smartcareerorg" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://github.com/Samiamirrizwan/Vision-2025-SmartCareerAI-PHP-Project" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="https://www.facebook.com/working4happiness/" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
                 </div>
             </div>
             
@@ -26,9 +26,9 @@
             <div class="footer-links">
                 <h4>Resources</h4>
                 <ul>
-                    <li><a href="#">Blog</a></li>
-                    <li><a href="#">Career Tips</a></li>
-                    <li><a href="#">FAQ</a></li>
+                    <li><a href="../blogs/data-science-analytics.php">Blog</a></li>
+                    <li><a href="https://hbr.org/2021/06/career-advice-from-wildly-successful-people">Career Tips</a></li>
+                    <li><a href="../faqs.php">FAQ</a></li>
                     <li><a href="user-settings.php">Settings</a></li>
                 </ul>
             </div>
