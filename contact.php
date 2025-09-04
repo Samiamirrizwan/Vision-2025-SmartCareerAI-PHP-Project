@@ -34,9 +34,9 @@
                 </div>
 
                 <div class="mt-10 pt-8 border-t border-white/20 flex space-x-4">
-                     <a href="#" class="text-2xl hover:text-blue-300 transition"><i class="fab fa-facebook"></i></a>
-                     <a href="#" class="text-2xl hover:text-blue-300 transition"><i class="fa-brands fa-x-twitter"></i></a>
-                     <a href="#" class="text-2xl hover:text-purple-300 transition"><i class="fab fa-instagram"></i></a>
+                     <a href="https://www.facebook.com/working4happiness/" class="text-2xl hover:text-blue-300 transition"><i class="fab fa-facebook"></i></a>
+                     <a href="https://twitter.com/SmartCareerAi/status/1743096488300106013" class="text-2xl hover:text-blue-300 transition"><i class="fa-brands fa-x-twitter"></i></a>
+                     <a href="https://www.instagram.com/corementor.in/" class="text-2xl hover:text-purple-300 transition"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
 
